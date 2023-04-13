@@ -1,4 +1,5 @@
 %{
+#include "symboltable.hpp"
 #define LIST     strcat(buf,yytext)
 #define token(t) {LIST; printf("<%s>\n",#t);}
 #define tokenNumber(t,i) {LIST; printf("<%s:%f>\n",#t,i);}
@@ -6,8 +7,12 @@
 
 #define MAX_LINE_LENG 256
 
+using namespace std;
+
 int linenum = 1;
 char buf[MAX_LINE_LENG];
+
+SymbolTable symboltable;
 %}
 
 /* definitions */
@@ -86,16 +91,19 @@ var                    {token('VAR');}
 when                   {token('WHEN');}
 
     /* identifiers */
-{identifier}           {tokenString('IDENTIFIER', yytext);}
+{identifier}           {symboltable.insert(yytext); tokenString('IDENTIFIER', yytext);}
 {numerical_constants}  {tokenNumber('NUMBER', atof(yytext));}
+
+    /* strings */
 {string_constants}     {
-                        char s[MAX_LINE_LENG] = {0};
+                        char str[MAX_LINE_LENG] = {0};
                         int idx = 0;
-                        for (int i = 1; i < yyleng - 1; ++i) {
+                        for (int i = 1; i < yyleng - 1; ++i) 
+                        {
                             if (yytext[i] == '"') ++i;
-                            s[idx++] = yytext[i];
+                            str[idx++] = yytext[i];
                         }
-                        tokenString(STRING, s);
+                        tokenString(STRING, str);
                        }
 
     /* comments */
@@ -123,6 +131,8 @@ when                   {token('WHEN');}
         LIST;
         printf("%d: %s", linenum++, buf);
         buf[0] = '\0';
+
+        
         yyterminate();
         }
 
@@ -142,6 +152,9 @@ int main(int argc, char* argv[])
 		if(source)
 			yyin = source;
 	}
-	
-	return yylex();;
+	yylex();
+    cout<<"test"<<endl;
+    symboltable.dump();
+    
+	return -1;
 }
