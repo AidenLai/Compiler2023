@@ -1,5 +1,5 @@
 %{
-#include "symboltable.hpp"
+#include "symboltable.cpp"
 #define LIST     strcat(buf,yytext)
 #define token(t) {LIST; printf("<%s>\n",#t);}
 #define tokenNumber(t,i) {LIST; printf("<%s:%f>\n",#t,i);}
@@ -86,6 +86,7 @@ result                 {token('RESULT');}
 return                 {token('RETURN');}
 skip                   {token('SKIP');}
 string                 {token('STRING');}
+then                   {token('THEN');}
 true                   {token('TRUE');}
 var                    {token('VAR');}
 when                   {token('WHEN');}
@@ -129,7 +130,7 @@ when                   {token('WHEN');}
 
 <<eof>> {
         LIST;
-        printf("%d: %s", linenum++, buf);
+        printf("%d: %s\n", linenum++, buf);
         buf[0] = '\0';
 
         
@@ -153,7 +154,7 @@ int main(int argc, char* argv[])
 			yyin = source;
 	}
 	yylex();
-    cout<<"test"<<endl;
+    printf("\nSymboltable:\n");
     symboltable.dump();
     
 	return -1;

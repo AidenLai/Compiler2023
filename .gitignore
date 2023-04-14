@@ -1,2 +1,4 @@
-lex.yy.c
-scanner
+lex.yy.cpp
+a.out
+*.o
+*.gch

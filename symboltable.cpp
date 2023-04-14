@@ -1,13 +1,13 @@
 #include <vector>
 #include <algorithm>
-#include "symbol.hpp"
+#include "symbol.cpp"
 
 using namespace std;
 
 class SymbolTable {
     public:
         vector<Symbol> table;
-        SymbolTable();
+        SymbolTable(){};
         ~SymbolTable(){};
         void insert(string id)
         {
