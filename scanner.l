@@ -1,5 +1,5 @@
 %{
-#include "symboltable.cpp"
+#include "symboltable.hpp"
 #define LIST     strcat(buf,yytext)
 #define token(t) {LIST; printf("<%s>\n",#t);}
 #define tokenNumber(t,i) {LIST; printf("<%s:%f>\n",#t,i);}
