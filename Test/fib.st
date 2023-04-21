@@ -24,6 +24,6 @@ end itFibonacci
 
 % main program 
 put "N: "
-putln n
+put n
 put "Result of iterative computation:  "
 put itFibonacci(n)
