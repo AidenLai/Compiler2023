@@ -23,7 +23,7 @@ letter {alphabet}+
 integer {digs}
 real {digs}"."{digs}
 numerical_constants {integer}|{real}
-string_constants (\"(\"\"|[^"\n])*\")
+string_constants (\"(\"\"|[^\"])*\")
 identifier {letter}({letter}|{dig})*
 
 %x COMMENT
@@ -104,7 +104,7 @@ when                   {token('WHEN');}
                             if (yytext[i] == '"') ++i;
                             str[idx++] = yytext[i];
                         }
-                        tokenString(STRING, str);
+                        tokenString('STRING_CONSTANTS', str);
                        }
 
     /* comments */
