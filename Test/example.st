@@ -18,4 +18,4 @@ if (c > 10) then
 else 
   put c
 end if
-put "Hello World\n"
+put "Hello World"

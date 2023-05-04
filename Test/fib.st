@@ -25,5 +25,7 @@ end itFibonacci
 % main program 
 put "N: "
 put n
+skip
 put "Result of iterative computation:  "
 put itFibonacci(n)
+

@@ -1,9 +1,10 @@
 %{
-#include "symboltable.hpp"
+
+#include "y.tab.hpp"
 #define LIST     strcat(buf,yytext)
-#define token(t) {LIST; printf("<%s>\n",#t);}
-#define tokenNumber(t,i) {LIST; printf("<%s:%f>\n",#t,i);}
-#define tokenString(t,s) {LIST; printf("<%s:%s>\n",#t,s);}
+#define token(t) {LIST; printf("<%s>\n",#t); return t;}
+#define tokenNumber(t,i) {LIST; printf("<%s:%f>\n",#t,i); return t;}
+#define tokenString(t,s) {LIST; printf("<%s:%s>\n",#t,s); return t;}
 
 #define MAX_LINE_LENG 256
 
@@ -47,53 +48,53 @@ identifier {letter}({letter}|{dig})*
 "-"                    {token('-');}
 "*"                    {token('*');}
 "/"                    {token('/');}
-"mod"                  {token('MOD');}
-":="                   {token(':=');}
+"mod"                  {token(MOD);}
+":="                   {token(ASSIGN);}
 "<"                    {token('<');}
-"<="                   {token('<=');}
-">="                   {token('>=');}
+"<="                   {token(LE);}
+">="                   {token(GE);}
 ">"                    {token('>');}
 "="                    {token('=');}
-"not="                 {token('NOT=');}
-"and"                  {token('AND');}
-"or"                   {token('OR');}
-"not"                  {token('NOT');}
+"not="                 {token(NOT_EQU);}
+"and"                  {token(AND);}
+"or"                   {token(OR);}
+"not"                  {token(NOT);}
 
     /* keywords */
-array                  {token('ARRAY');}
-begin                  {token('BEGIN');}
-bool                   {token('BOOL');}
-char                   {token('CHAR');}
-const                  {token('CONST');}
-decreasing             {token('DECREASING');}
-default                {token('DEFAULT');}
-do                     {token('DO');}
-else                   {token('ELSE');}
-end                    {token('END');}
-exit                   {token('EXIT');}
-false                  {token('FALSE');}
-for                    {token('FOR');}
-function               {token('FUNCTION');}
-get                    {token('GET');}
-if                     {token('IF');}
-int                    {token('INT');}
-loop                   {token('LOOP');}
-of                     {token('OF');}
-put                    {token('PUT');}
-procedure              {token('PROCEDURE');}
-real                   {token('REAL');}
-result                 {token('RESULT');}
-return                 {token('RETURN');}
-skip                   {token('SKIP');}
-string                 {token('STRING');}
-then                   {token('THEN');}
-true                   {token('TRUE');}
-var                    {token('VAR');}
-when                   {token('WHEN');}
+array                  {token(ARRAY);}
+begin                  {token(BEGIN_);}
+bool                   {token(BOOL);}
+char                   {token(CHAR);}
+const                  {token(CONST);}
+decreasing             {token(DECREASING);}
+default                {token(DEFAULT);}
+do                     {token(DO);}
+else                   {token(ELSE);}
+end                    {token(END);}
+exit                   {token(EXIT);}
+false                  {token(FALSE);}
+for                    {token(FOR);}
+function               {token(FUNCTION);}
+get                    {token(GET);}
+if                     {token(IF);}
+int                    {token(INT);}
+loop                   {token(LOOP);}
+of                     {token(OF);}
+put                    {token(PUT);}
+procedure              {token(PROCEDURE);}
+real                   {token(REAL);}
+result                 {token(RESULT);}
+return                 {token(RETURN);}
+skip                   {token(SKIP);}
+string                 {token(STRING);}
+then                   {token(THEN);}
+true                   {token(TRUE);}
+var                    {token(VAR);}
+when                   {token(WHEN);}
 
     /* identifiers */
-{identifier}           {symboltable.insert(yytext); tokenString('IDENTIFIER', yytext);}
-{numerical_constants}  {tokenNumber('NUMBER', atof(yytext));}
+{identifier}           {symboltable.insert(yytext); tokenString(IDENTIFIER, yytext);}
+{numerical_constants}  {tokenNumber(NUMBER, atof(yytext));}
 
     /* strings */
 {string_constants}     {
@@ -104,7 +105,7 @@ when                   {token('WHEN');}
                             if (yytext[i] == '"') ++i;
                             str[idx++] = yytext[i];
                         }
-                        tokenString('STRING_CONSTANTS', str);
+                        tokenString(STRING_CONSTANTS, str);
                        }
 
     /* comments */
@@ -127,12 +128,11 @@ when                   {token('WHEN');}
 
 
 [ \t]*  {LIST;}
-
+    
 <<eof>> {
         LIST;
         printf("%d: %s\n", linenum++, buf);
         buf[0] = '\0';
-
         
         yyterminate();
         }
@@ -144,18 +144,3 @@ when                   {token('WHEN');}
         exit(-1);
         }
 %%
-
-int main(int argc, char* argv[])
-{
-	if(argc > 1)
-	{
-		FILE *source = fopen(argv[1], "r");
-		if(source)
-			yyin = source;
-	}
-	yylex();
-    printf("\nSymboltable:\n");
-    symboltable.dump();
-    
-	return -1;
-}
