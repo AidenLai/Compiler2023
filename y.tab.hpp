@@ -75,18 +75,19 @@ extern int yydebug;
     TRUE = 285,
     VAR = 286,
     WHEN = 287,
-    IDENTIFIER = 288,
-    NUMBER = 289,
-    STRING_CONSTANTS = 290,
-    ASSIGN = 291,
-    AND = 292,
-    OR = 293,
-    NOT = 294,
-    NOT_EQU = 295,
-    LE = 296,
-    GE = 297,
-    MOD = 298,
-    UMINUS = 299
+    ASSIGN = 288,
+    AND = 289,
+    OR = 290,
+    NOT = 291,
+    NOT_EQU = 292,
+    LE = 293,
+    GE = 294,
+    MOD = 295,
+    IDENTIFIER = 296,
+    INT_NUM = 297,
+    REAL_NUM = 298,
+    STRING_CONSTANTS = 299,
+    UMINUS = 300
   };
 #endif
 /* Tokens.  */
@@ -120,22 +121,37 @@ extern int yydebug;
 #define TRUE 285
 #define VAR 286
 #define WHEN 287
-#define IDENTIFIER 288
-#define NUMBER 289
-#define STRING_CONSTANTS 290
-#define ASSIGN 291
-#define AND 292
-#define OR 293
-#define NOT 294
-#define NOT_EQU 295
-#define LE 296
-#define GE 297
-#define MOD 298
-#define UMINUS 299
+#define ASSIGN 288
+#define AND 289
+#define OR 290
+#define NOT 291
+#define NOT_EQU 292
+#define LE 293
+#define GE 294
+#define MOD 295
+#define IDENTIFIER 296
+#define INT_NUM 297
+#define REAL_NUM 298
+#define STRING_CONSTANTS 299
+#define UMINUS 300
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+
+union YYSTYPE
+{
+#line 14 "parser.y" /* yacc.c:1909  */
+
+  int ival;
+  float fval;
+  string *sval;
+  type var_type;
+  Symbol *symval;
+
+#line 152 "y.tab.hpp" /* yacc.c:1909  */
+};
+
+typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif

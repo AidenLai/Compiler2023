@@ -3,7 +3,7 @@
 #include "y.tab.hpp"
 #define LIST     strcat(buf,yytext)
 #define token(t) {LIST; printf("<%s>\n",#t); return t;}
-#define tokenNumber(t,i) {LIST; printf("<%s:%f>\n",#t,i); return t;}
+#define tokenNumber(t,i) {LIST; printf("<%s:%d>\n",#t,i); return t;}
 #define tokenString(t,s) {LIST; printf("<%s:%s>\n",#t,s); return t;}
 
 #define MAX_LINE_LENG 256
@@ -93,8 +93,9 @@ var                    {token(VAR);}
 when                   {token(WHEN);}
 
     /* identifiers */
-{identifier}           {symboltable.insert(yytext); tokenString(IDENTIFIER, yytext);}
-{numerical_constants}  {tokenNumber(NUMBER, atof(yytext));}
+{identifier}           {symboltable.insert(yytext); yylval.sval=new string(yytext); tokenString(IDENTIFIER, yytext);}
+{integer}              {yylval.ival = atoi(yytext); tokenNumber(INT_NUM, atoi(yytext));}
+{real}                 {yylval.fval = atof(yytext); tokenString(REAL_NUM, yytext);}
 
     /* strings */
 {string_constants}     {
@@ -105,6 +106,7 @@ when                   {token(WHEN);}
                             if (yytext[i] == '"') ++i;
                             str[idx++] = yytext[i];
                         }
+                        yylval.sval = new string(str);
                         tokenString(STRING_CONSTANTS, str);
                        }
 
