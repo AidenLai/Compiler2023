@@ -133,14 +133,10 @@ Grammar
    83          | IF expression THEN function_bodys END IF
 
    84 loop: LOOP function_bodys END LOOP
-   85     | FOR decreasing IDENTIFIER ':' num '.' '.' num function_bodys END FOR
+   85     | FOR decreasing IDENTIFIER ':' number '.' '.' number function_bodys END FOR
 
-   86 num: INT_NUM
-   87    | REAL_NUM
-   88    | IDENTIFIER
-
-   89 decreasing: DECREASING
-   90           | %empty
+   86 decreasing: DECREASING
+   87           | %empty
 
 
 Terminals, with rules where they appear
@@ -166,7 +162,7 @@ BEGIN_ (259) 47
 BOOL (260) 20
 CHAR (261)
 CONST (262) 16 17
-DECREASING (263) 89
+DECREASING (263) 86
 DEFAULT (264)
 DO (265)
 ELSE (266) 82
@@ -199,9 +195,9 @@ NOT_EQU (292) 72
 LE (293) 68
 GE (294) 70
 MOD (295) 62
-IDENTIFIER (296) 16 17 27 28 29 30 32 34 36 45 48 50 74 78 79 85 88
-INT_NUM (297) 22 31 86
-REAL_NUM (298) 23 87
+IDENTIFIER (296) 16 17 27 28 29 30 32 34 36 45 48 50 74 78 79 85
+INT_NUM (297) 22 31
+REAL_NUM (298) 23
 STRING_CONSTANTS (299) 24
 UMINUS (300)
 
@@ -233,7 +229,7 @@ variable (70)
 array (71)
     on left: 30, on right: 15
 number (72)
-    on left: 31 32, on right: 30
+    on left: 31 32, on right: 30 85
 function (73)
     on left: 34, on right: 11
 $@1 (74)
@@ -274,10 +270,8 @@ condition (90)
     on left: 82 83, on right: 6
 loop (91)
     on left: 84 85, on right: 7
-num (92)
-    on left: 86 87 88, on right: 85
-decreasing (93)
-    on left: 89 90, on right: 85
+decreasing (92)
+    on left: 86 87, on right: 85
 
 
 State 0
@@ -528,11 +522,11 @@ State 24
 
 State 25
 
-   85 loop: FOR . decreasing IDENTIFIER ':' num '.' '.' num function_bodys END FOR
+   85 loop: FOR . decreasing IDENTIFIER ':' number '.' '.' number function_bodys END FOR
 
     DECREASING  shift, and go to state 60
 
-    $default  reduce using rule 90 (decreasing)
+    $default  reduce using rule 87 (decreasing)
 
     decreasing  go to state 61
 
@@ -922,14 +916,14 @@ State 59
 
 State 60
 
-   89 decreasing: DECREASING .
+   86 decreasing: DECREASING .
 
-    $default  reduce using rule 89 (decreasing)
+    $default  reduce using rule 86 (decreasing)
 
 
 State 61
 
-   85 loop: FOR decreasing . IDENTIFIER ':' num '.' '.' num function_bodys END FOR
+   85 loop: FOR decreasing . IDENTIFIER ':' number '.' '.' number function_bodys END FOR
 
     IDENTIFIER  shift, and go to state 101
 
@@ -1677,7 +1671,7 @@ State 100
 
 State 101
 
-   85 loop: FOR decreasing IDENTIFIER . ':' num '.' '.' num function_bodys END FOR
+   85 loop: FOR decreasing IDENTIFIER . ':' number '.' '.' number function_bodys END FOR
 
     ':'  shift, and go to state 137
 
@@ -2343,13 +2337,12 @@ State 136
 
 State 137
 
-   85 loop: FOR decreasing IDENTIFIER ':' . num '.' '.' num function_bodys END FOR
+   85 loop: FOR decreasing IDENTIFIER ':' . number '.' '.' number function_bodys END FOR
 
-    IDENTIFIER  shift, and go to state 149
-    INT_NUM     shift, and go to state 150
-    REAL_NUM    shift, and go to state 151
+    IDENTIFIER  shift, and go to state 126
+    INT_NUM     shift, and go to state 127
 
-    num  go to state 152
+    number  go to state 149
 
 
 State 138
@@ -2361,8 +2354,8 @@ State 138
     ARRAY             shift, and go to state 4
     BEGIN_            shift, and go to state 22
     CONST             shift, and go to state 5
-    ELSE              shift, and go to state 153
-    END               shift, and go to state 154
+    ELSE              shift, and go to state 150
+    END               shift, and go to state 151
     EXIT              shift, and go to state 23
     FALSE             shift, and go to state 24
     FOR               shift, and go to state 25
@@ -2426,7 +2419,7 @@ State 141
     '('               shift, and go to state 39
 
     constant_exp        go to state 41
-    expression          go to state 155
+    expression          go to state 152
     function_procedure  go to state 45
     array_reference     go to state 46
 
@@ -2442,7 +2435,7 @@ State 143
 
    30 array: ARRAY IDENTIFIER ':' ARRAY number '.' . '.' number OF type
 
-    '.'  shift, and go to state 156
+    '.'  shift, and go to state 153
 
 
 State 144
@@ -2465,7 +2458,7 @@ State 146
 
     IDENTIFIER  shift, and go to state 130
 
-    parameter  go to state 157
+    parameter  go to state 154
 
 
 State 147
@@ -2476,7 +2469,7 @@ State 147
     ARRAY             shift, and go to state 4
     BEGIN_            shift, and go to state 22
     CONST             shift, and go to state 5
-    END               shift, and go to state 158
+    END               shift, and go to state 155
     EXIT              shift, and go to state 23
     FALSE             shift, and go to state 24
     FOR               shift, and go to state 25
@@ -2516,54 +2509,33 @@ State 148
 
    36 procedure: PROCEDURE IDENTIFIER $@2 parameters_block function_bodys END . IDENTIFIER
 
-    IDENTIFIER  shift, and go to state 159
+    IDENTIFIER  shift, and go to state 156
 
 
 State 149
 
-   88 num: IDENTIFIER .
+   85 loop: FOR decreasing IDENTIFIER ':' number . '.' '.' number function_bodys END FOR
 
-    $default  reduce using rule 88 (num)
+    '.'  shift, and go to state 157
 
 
 State 150
-
-   86 num: INT_NUM .
-
-    $default  reduce using rule 86 (num)
-
-
-State 151
-
-   87 num: REAL_NUM .
-
-    $default  reduce using rule 87 (num)
-
-
-State 152
-
-   85 loop: FOR decreasing IDENTIFIER ':' num . '.' '.' num function_bodys END FOR
-
-    '.'  shift, and go to state 160
-
-
-State 153
 
    82 condition: IF expression THEN function_bodys ELSE . function_bodys END IF
 
     $default  reduce using rule 38 (function_bodys)
 
-    function_bodys  go to state 161
+    function_bodys  go to state 158
 
 
-State 154
+State 151
 
    83 condition: IF expression THEN function_bodys END . IF
 
-    IF  shift, and go to state 162
+    IF  shift, and go to state 159
 
 
-State 155
+State 152
 
    58 expression: expression . '+' expression
    59           | expression . '-' expression
@@ -2599,45 +2571,45 @@ State 155
     $default  reduce using rule 80 (arguments)
 
 
-State 156
+State 153
 
    30 array: ARRAY IDENTIFIER ':' ARRAY number '.' '.' . number OF type
 
     IDENTIFIER  shift, and go to state 126
     INT_NUM     shift, and go to state 127
 
-    number  go to state 163
+    number  go to state 160
 
 
-State 157
+State 154
 
    43 parameters: parameters ',' parameter .
 
     $default  reduce using rule 43 (parameters)
 
 
-State 158
+State 155
 
    34 function: FUNCTION IDENTIFIER $@1 parameters_block type function_bodys END . IDENTIFIER
 
-    IDENTIFIER  shift, and go to state 164
+    IDENTIFIER  shift, and go to state 161
 
 
-State 159
+State 156
 
    36 procedure: PROCEDURE IDENTIFIER $@2 parameters_block function_bodys END IDENTIFIER .
 
     $default  reduce using rule 36 (procedure)
 
 
-State 160
+State 157
 
-   85 loop: FOR decreasing IDENTIFIER ':' num '.' . '.' num function_bodys END FOR
+   85 loop: FOR decreasing IDENTIFIER ':' number '.' . '.' number function_bodys END FOR
 
-    '.'  shift, and go to state 165
+    '.'  shift, and go to state 162
 
 
-State 161
+State 158
 
    37 function_bodys: function_bodys . function_body
    82 condition: IF expression THEN function_bodys ELSE function_bodys . END IF
@@ -2645,7 +2617,7 @@ State 161
     ARRAY             shift, and go to state 4
     BEGIN_            shift, and go to state 22
     CONST             shift, and go to state 5
-    END               shift, and go to state 166
+    END               shift, and go to state 163
     EXIT              shift, and go to state 23
     FALSE             shift, and go to state 24
     FOR               shift, and go to state 25
@@ -2681,86 +2653,85 @@ State 161
     loop                go to state 48
 
 
-State 162
+State 159
 
    83 condition: IF expression THEN function_bodys END IF .
 
     $default  reduce using rule 83 (condition)
 
 
-State 163
+State 160
 
    30 array: ARRAY IDENTIFIER ':' ARRAY number '.' '.' number . OF type
 
-    OF  shift, and go to state 167
+    OF  shift, and go to state 164
 
 
-State 164
+State 161
 
    34 function: FUNCTION IDENTIFIER $@1 parameters_block type function_bodys END IDENTIFIER .
 
     $default  reduce using rule 34 (function)
 
 
-State 165
+State 162
 
-   85 loop: FOR decreasing IDENTIFIER ':' num '.' '.' . num function_bodys END FOR
+   85 loop: FOR decreasing IDENTIFIER ':' number '.' '.' . number function_bodys END FOR
 
-    IDENTIFIER  shift, and go to state 149
-    INT_NUM     shift, and go to state 150
-    REAL_NUM    shift, and go to state 151
+    IDENTIFIER  shift, and go to state 126
+    INT_NUM     shift, and go to state 127
 
-    num  go to state 168
+    number  go to state 165
 
 
-State 166
+State 163
 
    82 condition: IF expression THEN function_bodys ELSE function_bodys END . IF
 
-    IF  shift, and go to state 169
+    IF  shift, and go to state 166
 
 
-State 167
+State 164
 
    30 array: ARRAY IDENTIFIER ':' ARRAY number '.' '.' number OF . type
 
     ':'  shift, and go to state 51
 
-    type  go to state 170
+    type  go to state 167
 
 
-State 168
+State 165
 
-   85 loop: FOR decreasing IDENTIFIER ':' num '.' '.' num . function_bodys END FOR
+   85 loop: FOR decreasing IDENTIFIER ':' number '.' '.' number . function_bodys END FOR
 
     $default  reduce using rule 38 (function_bodys)
 
-    function_bodys  go to state 171
+    function_bodys  go to state 168
 
 
-State 169
+State 166
 
    82 condition: IF expression THEN function_bodys ELSE function_bodys END IF .
 
     $default  reduce using rule 82 (condition)
 
 
-State 170
+State 167
 
    30 array: ARRAY IDENTIFIER ':' ARRAY number '.' '.' number OF type .
 
     $default  reduce using rule 30 (array)
 
 
-State 171
+State 168
 
    37 function_bodys: function_bodys . function_body
-   85 loop: FOR decreasing IDENTIFIER ':' num '.' '.' num function_bodys . END FOR
+   85 loop: FOR decreasing IDENTIFIER ':' number '.' '.' number function_bodys . END FOR
 
     ARRAY             shift, and go to state 4
     BEGIN_            shift, and go to state 22
     CONST             shift, and go to state 5
-    END               shift, and go to state 172
+    END               shift, and go to state 169
     EXIT              shift, and go to state 23
     FALSE             shift, and go to state 24
     FOR               shift, and go to state 25
@@ -2796,15 +2767,15 @@ State 171
     loop                go to state 48
 
 
-State 172
+State 169
 
-   85 loop: FOR decreasing IDENTIFIER ':' num '.' '.' num function_bodys END . FOR
+   85 loop: FOR decreasing IDENTIFIER ':' number '.' '.' number function_bodys END . FOR
 
-    FOR  shift, and go to state 173
+    FOR  shift, and go to state 170
 
 
-State 173
+State 170
 
-   85 loop: FOR decreasing IDENTIFIER ':' num '.' '.' num function_bodys END FOR .
+   85 loop: FOR decreasing IDENTIFIER ':' number '.' '.' number function_bodys END FOR .
 
     $default  reduce using rule 85 (loop)

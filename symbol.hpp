@@ -7,10 +7,10 @@ using namespace std;
 struct data
 {
     /* data */
-    int int_data;
-    float real_data;
-    bool bool_data;
-    string string_data;
+    int int_data = 0;
+    float real_data = 0.0;
+    bool bool_data = false;
+    string string_data = "";
     vector<data> array_data;
 };
 

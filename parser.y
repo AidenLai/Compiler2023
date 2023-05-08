@@ -24,7 +24,7 @@ symboltables symtab;
 %token <fval> REAL_NUM
 %token <sval> STRING_CONSTANTS
 
-%type <symval> constant_exp expression function_procedure array_reference
+%type <symval> constant_exp expression function_procedure array_reference number
 %type <var_type> type
 
 /* precedence */
@@ -164,8 +164,11 @@ variable:   VAR IDENTIFIER type ASSIGN constant_exp
 array:  ARRAY IDENTIFIER ':' ARRAY number '.' '.' number OF type
         {
                 /* check if the identifier is already in the symbol table */
-                if(symtab.lookup(*($2)) != NULL)
+                if(symtab.global_lookup(*($2)) != NULL)
                         yyerror("array redefine");
+
+                if($5->S_type != type::INT_TYPE || $8->S_type != type::INT_TYPE)
+                        yyerror("array index must be integer");
 
                 Symbol s;
                 s.init = true;
@@ -175,7 +178,21 @@ array:  ARRAY IDENTIFIER ':' ARRAY number '.' '.' number OF type
         }
         ;
 number:    INT_NUM
+        {
+                $$ = intConst($1);
+        }
         |   IDENTIFIER
+        {
+                /* check if the identifier is already in the symbol table */
+                if(symtab.global_lookup(*($1)) == NULL)
+                        yyerror("identifier not found");
+                
+                Symbol *s = symtab.global_lookup(*($1));
+                if (s->S_flag != flag::CONSTANT)
+                        yyerror("identifier is not a constant");
+                
+                $$ = s;
+        }
         ;
 function:  FUNCTION IDENTIFIER 
         {
@@ -256,6 +273,23 @@ block:      BEGIN_
         }
         ;
 simple:     IDENTIFIER ASSIGN expression
+        {
+                /* check if the identifier is in the symbol table */
+                if(symtab.global_lookup(*($1)) == NULL)
+                        yyerror("variable not defined");
+                
+                /* check if the identifier is a variable */
+                if(symtab.global_lookup(*($1))->S_flag != flag::VARIABLE)
+                        yyerror("not a variable");
+                
+                /* check if the type of the identifier is the same as the type of the expression */
+                if (symtab.global_lookup(*($1))->S_type != $3->S_type)
+                        yyerror("type mismatch");
+                
+                Symbol *s = symtab.global_lookup(*($1));
+                s->init = true;
+                s->S_data = $3->S_data;
+        }
         |   PUT expression
         |   GET IDENTIFIER
         |   RESULT expression
@@ -265,25 +299,215 @@ simple:     IDENTIFIER ASSIGN expression
         |   expression
         ;
 when:    WHEN expression
+        {
+                /* type check */
+                if($2->S_type != type::BOOL_TYPE)
+                        yyerror("type mismatch");
+        }
         |
         ;
 
 expression:    expression '+' expression
+        {
+                /* type check */
+                if($1->S_type != $3->S_type)
+                        yyerror("type mismatch");
+
+                
+                if($1->S_type == type::INT_TYPE)
+                        $$ = intConst($1->S_data.int_data + $3->S_data.int_data);
+                else if($1->S_type == type::REAL_TYPE)
+                        $$ = realConst($1->S_data.real_data + $3->S_data.real_data);
+                else
+                        yyerror("operator error");
+        }
         |   expression '-' expression
+        {
+                /* type check */
+                if($1->S_type != $3->S_type)
+                        yyerror("type mismatch");
+
+                
+                if($1->S_type == type::INT_TYPE)
+                        $$ = intConst($1->S_data.int_data - $3->S_data.int_data);
+                else if($1->S_type == type::REAL_TYPE)
+                        $$ = realConst($1->S_data.real_data - $3->S_data.real_data);
+                else
+                        yyerror("operator error");
+        }
         |   expression '*' expression
+        {
+                /* type check */
+                if($1->S_type != $3->S_type)
+                        yyerror("type mismatch");
+
+                
+                if($1->S_type == type::INT_TYPE)
+                        $$ = intConst($1->S_data.int_data * $3->S_data.int_data);
+                else if($1->S_type == type::REAL_TYPE)
+                        $$ = realConst($1->S_data.real_data * $3->S_data.real_data);
+                else
+                        yyerror("operator error");
+        }
         |   expression '/' expression
+        {
+                /* type check */
+                if($1->S_type != $3->S_type)
+                        yyerror("type mismatch");
+
+                
+                if($1->S_type == type::INT_TYPE)
+                        $$ = intConst($1->S_data.int_data / $3->S_data.int_data);
+                else if($1->S_type == type::REAL_TYPE)
+                        $$ = realConst($1->S_data.real_data / $3->S_data.real_data);
+                else
+                        yyerror("operator error");
+        }
         |   expression MOD expression
+        {
+                /* type check */
+                if($1->S_type != $3->S_type)
+                        yyerror("type mismatch");
+
+                
+                if($1->S_type == type::INT_TYPE)
+                        $$ = intConst($1->S_data.int_data % $3->S_data.int_data);
+                else
+                        yyerror("operator error");
+        }
         |   '-' expression    %prec UMINUS
+        {
+                if($2->S_type == type::INT_TYPE)
+                        $$ = intConst(-$2->S_data.int_data);
+                else if($2->S_type == type::REAL_TYPE)
+                        $$ = realConst(-$2->S_data.real_data);
+                else
+                        yyerror("operator error");
+        }
         |   expression AND expression
+        {
+                /* type check */
+                if($1->S_type != $3->S_type)
+                        yyerror("type mismatch");
+
+                
+                if($1->S_type == type::BOOL_TYPE)
+                        $$ = boolConst($1->S_data.bool_data && $3->S_data.bool_data);
+                else
+                        yyerror("operator error");
+        }
         |   expression OR expression
+        {
+                /* type check */
+                if($1->S_type != $3->S_type)
+                        yyerror("type mismatch");
+
+                
+                if($1->S_type == type::BOOL_TYPE)
+                        $$ = boolConst($1->S_data.bool_data || $3->S_data.bool_data);
+                else
+                        yyerror("operator error");
+        }
         |   expression NOT expression
+        {
+                /* type check */
+                if($1->S_type != $3->S_type)
+                        yyerror("type mismatch");
+
+                
+                if($1->S_type == type::BOOL_TYPE)
+                        $$ = boolConst(!($3->S_data.bool_data));
+                else
+                        yyerror("operator error");
+        }
         |   expression '<' expression
+        {
+                /* type check */
+                if($1->S_type != $3->S_type)
+                        yyerror("type mismatch");
+
+                
+                if($1->S_type == type::INT_TYPE)
+                        $$ = boolConst($1->S_data.int_data < $3->S_data.int_data);
+                else if($1->S_type == type::REAL_TYPE)
+                        $$ = boolConst($1->S_data.real_data < $3->S_data.real_data);
+                else
+                        yyerror("operator error");
+        }
         |   expression LE  expression
+        {
+                /* type check */
+                if($1->S_type != $3->S_type)
+                        yyerror("type mismatch");
+
+                
+                if($1->S_type == type::INT_TYPE)
+                        $$ = boolConst($1->S_data.int_data <= $3->S_data.int_data);
+                else if($1->S_type == type::REAL_TYPE)
+                        $$ = boolConst($1->S_data.real_data <= $3->S_data.real_data);
+                else
+                        yyerror("operator error");
+        }
         |   expression '=' expression
+        {
+                /* type check */
+                if($1->S_type != $3->S_type)
+                        yyerror("type mismatch");
+
+                if($1->S_type == type::INT_TYPE)
+                        $$ = boolConst($1->S_data.int_data == $3->S_data.int_data);
+                else if($1->S_type == type::REAL_TYPE)
+                        $$ = boolConst($1->S_data.real_data == $3->S_data.real_data);
+                else if($1->S_type == type::BOOL_TYPE)
+                        $$ = boolConst($1->S_data.bool_data == $3->S_data.bool_data);
+                else
+                        yyerror("operator error");
+        }
         |   expression GE expression
+        {
+                /* type check */
+                if($1->S_type != $3->S_type)
+                        yyerror("type mismatch");
+
+                if($1->S_type == type::INT_TYPE)
+                        $$ = boolConst($1->S_data.int_data >= $3->S_data.int_data);
+                else if($1->S_type == type::REAL_TYPE)
+                        $$ = boolConst($1->S_data.real_data >= $3->S_data.real_data);
+                else
+                        yyerror("operator error");
+        }
         |   expression '>' expression
+        {
+                /* type check */
+                if($1->S_type != $3->S_type)
+                        yyerror("type mismatch");
+
+                if($1->S_type == type::INT_TYPE)
+                        $$ = boolConst($1->S_data.int_data > $3->S_data.int_data);
+                else if($1->S_type == type::REAL_TYPE)
+                        $$ = boolConst($1->S_data.real_data > $3->S_data.real_data);
+                else
+                        yyerror("operator error");
+        }
         |   expression NOT_EQU expression
+        {
+                /* type check */
+                if($1->S_type != $3->S_type)
+                        yyerror("type mismatch");
+
+                if($1->S_type == type::INT_TYPE)
+                        $$ = boolConst($1->S_data.int_data != $3->S_data.int_data);
+                else if($1->S_type == type::REAL_TYPE)
+                        $$ = boolConst($1->S_data.real_data != $3->S_data.real_data);
+                else if($1->S_type == type::BOOL_TYPE)
+                        $$ = boolConst($1->S_data.bool_data != $3->S_data.bool_data);
+                else
+                        yyerror("operator error");
+        }
         |   '(' expression ')'
+        {
+                $$ = $2;
+        }
         |   IDENTIFIER
         {
                 /* check if the identifier is in the symbol table */
@@ -315,7 +539,9 @@ array_reference:    IDENTIFIER '[' expression ']'
                         yyerror("Not defined error");
                 else if (symtab.global_lookup(*($1))->S_flag != flag::ARRAY_FLAG)
                         yyerror("Not an array error");
-                else
+                else if($3->S_type != type::INT_TYPE)
+                        yyerror("Array index must be an integer");
+                else                        
                         $$ = symtab.global_lookup(*($1));
         }
         ;
@@ -323,15 +549,25 @@ arguments:  arguments ',' expression
         |   expression
         ;
 
-condition:  IF expression THEN function_bodys ELSE function_bodys END IF
-        |   IF expression THEN function_bodys END IF
+condition:  IF expression
+        {
+                if($2->S_type != type::BOOL_TYPE)
+                        yyerror("Condition must be a boolean");
+        } 
+        THEN function_bodys ELSE function_bodys END IF
+        |   IF expression
+        {
+                if($2->S_type != type::BOOL_TYPE)
+                        yyerror("Condition must be a boolean");
+        } 
+        THEN function_bodys END IF
         ;
 loop:   LOOP function_bodys END LOOP
-        |   FOR decreasing IDENTIFIER ':' num '.' '.' num function_bodys END FOR
-        ;
-num:    INT_NUM
-        | REAL_NUM
-        |   IDENTIFIER
+        |   FOR decreasing IDENTIFIER ':' number '.' '.' number function_bodys END FOR
+        {
+                if($5->S_type != type::INT_TYPE || $8->S_type != type::INT_TYPE)
+                        yyerror("Index must be an integer");
+        }
         ;
 decreasing:     DECREASING
         |
