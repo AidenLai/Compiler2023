@@ -36,6 +36,7 @@ enum class flag
 class Symbol {
 public:
     string id;
+    int param_num = 0;
     data S_data;
     type S_type;
     flag S_flag;

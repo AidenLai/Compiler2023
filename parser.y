@@ -4,6 +4,7 @@
 #define Trace(t)        printf(t)
 void yyerror(string s);
 symboltables symtab;
+int param_num = 0;
 %}
 
 /* tokens */
@@ -188,8 +189,6 @@ number:    INT_NUM
                         yyerror("identifier not found");
                 
                 Symbol *s = symtab.global_lookup(*($1));
-                if (s->S_flag != flag::CONSTANT)
-                        yyerror("identifier is not a constant");
                 
                 $$ = s;
         }
@@ -205,12 +204,17 @@ function:  FUNCTION IDENTIFIER
                 s.S_flag = flag::FUNC;
                 symtab.insert(*($2), s);
                 symtab.push();
+                param_num = 0;
         }
         parameters_block type function_bodys END IDENTIFIER
         {
+                cout<<"<-----------------------local variable------------------->"<<endl;
                 symtab.tables.back().dump();
+                cout<<"<-----------------------local variable end--------------->"<<endl;
                 symtab.pop();
                 symtab.tables.back().table.back().S_type = $5;
+                symtab.tables.back().table.back().param_num = param_num;
+                param_num = 0;
                 if (*$2 != *$8)
                         yyerror("function declaration error");
         }
@@ -227,11 +231,16 @@ procedure:  PROCEDURE IDENTIFIER
                 s.S_type = type::NONE;
                 symtab.insert(*($2), s);
                 symtab.push();
+                param_num = 0;
         }
         parameters_block function_bodys END IDENTIFIER
         {
+                cout<<"<-----------------------local variable------------------->"<<endl;
                 symtab.tables.back().dump();
+                cout<<"<-----------------------local variable end--------------->"<<endl;
                 symtab.pop();
+                symtab.tables.back().table.back().param_num = param_num;
+                param_num = 0;
                 if (*$2 != *$7)
                         yyerror("function declaration error");
         }
@@ -254,6 +263,8 @@ parameter:  IDENTIFIER type
                 if(symtab.lookup(*($1)) != NULL)
                         yyerror("variable redefine");
                 
+                param_num++;
+
                 Symbol s;
                 s.init = true;
                 s.S_type = $2;
@@ -268,7 +279,9 @@ block:      BEGIN_
         }
         function_bodys END
         {
+                cout<<"<-----------------------local variable------------------->"<<endl;
                 symtab.tables.back().dump();
+                cout<<"<-----------------------local variable end--------------->"<<endl;
                 symtab.pop();
         }
         ;
@@ -292,6 +305,18 @@ simple:     IDENTIFIER ASSIGN expression
         }
         |   PUT expression
         |   GET IDENTIFIER
+        {
+                /* check if the identifier is in the symbol table */
+                if(symtab.global_lookup(*($2)) == NULL)
+                        yyerror("variable not defined");
+                
+                /* check if the identifier is a variable */
+                if(symtab.global_lookup(*($2))->S_flag != flag::VARIABLE)
+                        yyerror("not a variable");
+                
+                Symbol *s = symtab.global_lookup(*($2));
+                s->init = true;
+        }
         |   RESULT expression
         |   RETURN
         |   EXIT when
@@ -527,8 +552,14 @@ function_procedure:     IDENTIFIER '(' arguments ')'
                         yyerror("Not defined error");
                 else if (symtab.global_lookup(*($1))->S_flag != flag::FUNC)
                         yyerror("Not a function error");
+                else if (symtab.global_lookup(*($1))->param_num != param_num)
+                        yyerror("Parameter number mismatch");
                 else
+                {
+                        param_num = 0;
                         $$ = symtab.global_lookup(*($1));
+                }
+                       
         }
         ;
 
@@ -545,29 +576,64 @@ array_reference:    IDENTIFIER '[' expression ']'
                         $$ = symtab.global_lookup(*($1));
         }
         ;
-arguments:  arguments ',' expression
-        |   expression
+arguments:  arguments ',' func_expression
+        |   func_expression
+        ;
+func_expression: expression
+        {
+                param_num++;
+        }
         ;
 
-condition:  IF expression
+if_head : IF expression
         {
                 if($2->S_type != type::BOOL_TYPE)
                         yyerror("Condition must be a boolean");
-        } 
-        THEN function_bodys ELSE function_bodys END IF
-        |   IF expression
-        {
-                if($2->S_type != type::BOOL_TYPE)
-                        yyerror("Condition must be a boolean");
-        } 
-        THEN function_bodys END IF
+        }
+condition:  if_head THEN function_bodys ELSE function_bodys END IF
+        |   if_head THEN function_bodys END IF
         ;
-loop:   LOOP function_bodys END LOOP
-        |   FOR decreasing IDENTIFIER ':' number '.' '.' number function_bodys END FOR
+
+loop:   LOOP
         {
-                if($5->S_type != type::INT_TYPE || $8->S_type != type::INT_TYPE)
+                symtab.push();
+        } 
+        function_bodys END LOOP
+        {
+                cout<<"<-----------------------local variable------------------->"<<endl;
+                symtab.tables.back().dump();
+                cout<<"<-----------------------local variable end--------------->"<<endl;
+                symtab.pop();
+        }
+        |   FOR decreasing
+        {
+                symtab.push();
+        }        
+        IDENTIFIER
+        {
+                /* check if the identifier is already in the symbol table */
+                if(symtab.lookup(*($4)) != NULL)
+                        yyerror("variable redefine");
+                
+                Symbol s;
+                s.init = false;
+                s.S_type = type::INT_TYPE;
+                s.S_flag = flag::VARIABLE;
+                symtab.insert(*($4), s);
+        }
+        ':' number '.' '.' number
+        {
+                if($7->S_type != type::INT_TYPE || $10->S_type != type::INT_TYPE)
                         yyerror("Index must be an integer");
         }
+        function_bodys END FOR
+        {
+                cout<<"<-----------------------local variable------------------->"<<endl;
+                symtab.tables.back().dump();
+                cout<<"<-----------------------local variable end--------------->"<<endl;
+                symtab.pop();
+        }
+        
         ;
 decreasing:     DECREASING
         |
@@ -595,6 +661,6 @@ int main(int argc, char *argv[])
     if (yyparse() == 1)                 /* parsing */
         yyerror("Parsing error !");     /* syntax error */
 
-        printf("SymbolTable:\n");
+        printf("Global SymbolTable:\n");
         symtab.dump();
 }
