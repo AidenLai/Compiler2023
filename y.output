@@ -5,14 +5,10 @@ Terminals unused in grammar
    DO
 
 
-State 34 conflicts: 1 shift/reduce
 State 44 conflicts: 1 shift/reduce
-State 55 conflicts: 1 shift/reduce
-State 64 conflicts: 1 shift/reduce
 State 67 conflicts: 1 shift/reduce
 State 68 conflicts: 1 shift/reduce
-State 102 conflicts: 1 shift/reduce
-State 105 conflicts: 1 shift/reduce
+State 101 conflicts: 1 shift/reduce
 
 
 Grammar
@@ -65,11 +61,11 @@ Grammar
 
    33 $@1: %empty
 
-   34 function: FUNCTION IDENTIFIER $@1 parameters_block type function_bodys END IDENTIFIER
+   34 function: FUNCTION IDENTIFIER $@1 '(' parameters_block ')' type function_bodys END IDENTIFIER
 
    35 $@2: %empty
 
-   36 procedure: PROCEDURE IDENTIFIER $@2 parameters_block function_bodys END IDENTIFIER
+   36 procedure: PROCEDURE IDENTIFIER $@2 '(' parameters_block ')' function_bodys END IDENTIFIER
 
    37 function_bodys: function_bodys function_body
    38               | %empty
@@ -77,7 +73,7 @@ Grammar
    39 function_body: declaration
    40              | statement
 
-   41 parameters_block: '(' parameters ')'
+   41 parameters_block: parameters
    42                 | %empty
 
    43 parameters: parameters ',' parameter
@@ -122,48 +118,51 @@ Grammar
    76           | function_procedure
    77           | array_reference
 
-   78 function_procedure: IDENTIFIER '(' arguments ')'
+   78 function_procedure: IDENTIFIER '(' argument_body ')'
 
    79 array_reference: IDENTIFIER '[' expression ']'
 
-   80 arguments: arguments ',' func_expression
-   81          | func_expression
+   80 argument_body: arguments
+   81              | %empty
 
-   82 func_expression: expression
+   82 arguments: arguments ',' func_expression
+   83          | func_expression
 
-   83 if_head: IF expression
+   84 func_expression: expression
 
-   84 condition: if_head THEN function_bodys ELSE function_bodys END IF
-   85          | if_head THEN function_bodys END IF
+   85 if_head: IF expression
 
-   86 $@4: %empty
+   86 condition: if_head THEN function_bodys ELSE function_bodys END IF
+   87          | if_head THEN function_bodys END IF
 
-   87 loop: LOOP $@4 function_bodys END LOOP
+   88 $@4: %empty
 
-   88 $@5: %empty
+   89 loop: LOOP $@4 function_bodys END LOOP
 
-   89 $@6: %empty
+   90 $@5: %empty
 
-   90 $@7: %empty
+   91 $@6: %empty
 
-   91 loop: FOR decreasing $@5 IDENTIFIER $@6 ':' number '.' '.' number $@7 function_bodys END FOR
+   92 $@7: %empty
 
-   92 decreasing: DECREASING
-   93           | %empty
+   93 loop: FOR decreasing $@5 IDENTIFIER $@6 ':' number '.' '.' number $@7 function_bodys END FOR
+
+   94 decreasing: DECREASING
+   95           | %empty
 
 
 Terminals, with rules where they appear
 
 $end (0) 0
-'(' (40) 41 73 78
-')' (41) 41 73 78
+'(' (40) 34 36 73 78
+')' (41) 34 36 73 78
 '*' (42) 60
 '+' (43) 58
-',' (44) 43 80
+',' (44) 43 82
 '-' (45) 59 63
-'.' (46) 30 91
+'.' (46) 30 93
 '/' (47) 61
-':' (58) 18 19 20 21 30 91
+':' (58) 18 19 20 21 30 93
 '<' (60) 67
 '=' (61) 69
 '>' (62) 71
@@ -175,19 +174,19 @@ BEGIN_ (259) 47
 BOOL (260) 20
 CHAR (261)
 CONST (262) 16 17
-DECREASING (263) 92
+DECREASING (263) 94
 DEFAULT (264)
 DO (265)
-ELSE (266) 84
-END (267) 34 36 47 84 85 87 91
+ELSE (266) 86
+END (267) 34 36 47 86 87 89 93
 EXIT (268) 53
 FALSE (269) 26
-FOR (270) 91
+FOR (270) 93
 FUNCTION (271) 34
 GET (272) 50
-IF (273) 83 84 85
+IF (273) 85 86 87
 INT (274) 18
-LOOP (275) 87
+LOOP (275) 89
 OF (276) 30
 PUT (277) 49
 PROCEDURE (278) 36
@@ -196,7 +195,7 @@ RESULT (280) 51
 RETURN (281) 52
 SKIP (282) 54
 STRING (283) 21
-THEN (284) 84 85
+THEN (284) 86 87
 TRUE (285) 25
 VAR (286) 27 28 29
 WHEN (287) 56
@@ -208,7 +207,7 @@ NOT_EQU (292) 72
 LE (293) 68
 GE (294) 70
 MOD (295) 62
-IDENTIFIER (296) 16 17 27 28 29 30 32 34 36 45 48 50 74 78 79 91
+IDENTIFIER (296) 16 17 27 28 29 30 32 34 36 45 48 50 74 78 79 93
 INT_NUM (297) 22 31
 REAL_NUM (298) 23
 STRING_CONSTANTS (299) 24
@@ -242,7 +241,7 @@ variable (70)
 array (71)
     on left: 30, on right: 15
 number (72)
-    on left: 31 32, on right: 30 91
+    on left: 31 32, on right: 30 93
 function (73)
     on left: 34, on right: 11
 $@1 (74)
@@ -252,7 +251,7 @@ procedure (75)
 $@2 (76)
     on left: 35, on right: 36
 function_bodys (77)
-    on left: 37 38, on right: 34 36 37 47 84 85 87 91
+    on left: 37 38, on right: 34 36 37 47 86 87 89 93
 function_body (78)
     on left: 39 40, on right: 37
 parameters_block (79)
@@ -272,31 +271,33 @@ when (85)
 expression (86)
     on left: 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75
     76 77, on right: 48 49 51 55 56 58 59 60 61 62 63 64 65 66 67 68
-    69 70 71 72 73 79 82 83
+    69 70 71 72 73 79 84 85
 function_procedure (87)
     on left: 78, on right: 76
 array_reference (88)
     on left: 79, on right: 77
-arguments (89)
-    on left: 80 81, on right: 78 80
-func_expression (90)
-    on left: 82, on right: 80 81
-if_head (91)
-    on left: 83, on right: 84 85
-condition (92)
-    on left: 84 85, on right: 6
-loop (93)
-    on left: 87 91, on right: 7
-$@4 (94)
-    on left: 86, on right: 87
-$@5 (95)
-    on left: 88, on right: 91
-$@6 (96)
-    on left: 89, on right: 91
-$@7 (97)
-    on left: 90, on right: 91
-decreasing (98)
-    on left: 92 93, on right: 91
+argument_body (89)
+    on left: 80 81, on right: 78
+arguments (90)
+    on left: 82 83, on right: 80 82
+func_expression (91)
+    on left: 84, on right: 82 83
+if_head (92)
+    on left: 85, on right: 86 87
+condition (93)
+    on left: 86 87, on right: 6
+loop (94)
+    on left: 89 93, on right: 7
+$@4 (95)
+    on left: 88, on right: 89
+$@5 (96)
+    on left: 90, on right: 93
+$@6 (97)
+    on left: 91, on right: 93
+$@7 (98)
+    on left: 92, on right: 93
+decreasing (99)
+    on left: 94 95, on right: 93
 
 
 State 0
@@ -363,14 +364,14 @@ State 5
 
 State 6
 
-   34 function: FUNCTION . IDENTIFIER $@1 parameters_block type function_bodys END IDENTIFIER
+   34 function: FUNCTION . IDENTIFIER $@1 '(' parameters_block ')' type function_bodys END IDENTIFIER
 
     IDENTIFIER  shift, and go to state 19
 
 
 State 7
 
-   36 procedure: PROCEDURE . IDENTIFIER $@2 parameters_block function_bodys END IDENTIFIER
+   36 procedure: PROCEDURE . IDENTIFIER $@2 '(' parameters_block ')' function_bodys END IDENTIFIER
 
     IDENTIFIER  shift, and go to state 20
 
@@ -491,7 +492,7 @@ State 18
 
 State 19
 
-   34 function: FUNCTION IDENTIFIER . $@1 parameters_block type function_bodys END IDENTIFIER
+   34 function: FUNCTION IDENTIFIER . $@1 '(' parameters_block ')' type function_bodys END IDENTIFIER
 
     $default  reduce using rule 33 ($@1)
 
@@ -500,7 +501,7 @@ State 19
 
 State 20
 
-   36 procedure: PROCEDURE IDENTIFIER . $@2 parameters_block function_bodys END IDENTIFIER
+   36 procedure: PROCEDURE IDENTIFIER . $@2 '(' parameters_block ')' function_bodys END IDENTIFIER
 
     $default  reduce using rule 35 ($@2)
 
@@ -548,11 +549,11 @@ State 24
 
 State 25
 
-   91 loop: FOR . decreasing $@5 IDENTIFIER $@6 ':' number '.' '.' number $@7 function_bodys END FOR
+   93 loop: FOR . decreasing $@5 IDENTIFIER $@6 ':' number '.' '.' number $@7 function_bodys END FOR
 
     DECREASING  shift, and go to state 61
 
-    $default  reduce using rule 93 (decreasing)
+    $default  reduce using rule 95 (decreasing)
 
     decreasing  go to state 62
 
@@ -566,7 +567,7 @@ State 26
 
 State 27
 
-   83 if_head: IF . expression
+   85 if_head: IF . expression
 
     FALSE             shift, and go to state 24
     TRUE              shift, and go to state 33
@@ -585,9 +586,9 @@ State 27
 
 State 28
 
-   87 loop: LOOP . $@4 function_bodys END LOOP
+   89 loop: LOOP . $@4 function_bodys END LOOP
 
-    $default  reduce using rule 86 ($@4)
+    $default  reduce using rule 88 ($@4)
 
     $@4  go to state 66
 
@@ -655,14 +656,13 @@ State 34
 
    48 simple: IDENTIFIER . ASSIGN expression
    74 expression: IDENTIFIER .
-   78 function_procedure: IDENTIFIER . '(' arguments ')'
+   78 function_procedure: IDENTIFIER . '(' argument_body ')'
    79 array_reference: IDENTIFIER . '[' expression ']'
 
     ASSIGN  shift, and go to state 69
     '('     shift, and go to state 70
     '['     shift, and go to state 71
 
-    '('       [reduce using rule 74 (expression)]
     $default  reduce using rule 74 (expression)
 
 
@@ -806,8 +806,8 @@ State 46
 
 State 47
 
-   84 condition: if_head . THEN function_bodys ELSE function_bodys END IF
-   85          | if_head . THEN function_bodys END IF
+   86 condition: if_head . THEN function_bodys ELSE function_bodys END IF
+   87          | if_head . THEN function_bodys END IF
 
     THEN  shift, and go to state 88
 
@@ -868,25 +868,16 @@ State 53
 
 State 54
 
-   34 function: FUNCTION IDENTIFIER $@1 . parameters_block type function_bodys END IDENTIFIER
+   34 function: FUNCTION IDENTIFIER $@1 . '(' parameters_block ')' type function_bodys END IDENTIFIER
 
     '('  shift, and go to state 96
-
-    $default  reduce using rule 42 (parameters_block)
-
-    parameters_block  go to state 97
 
 
 State 55
 
-   36 procedure: PROCEDURE IDENTIFIER $@2 . parameters_block function_bodys END IDENTIFIER
+   36 procedure: PROCEDURE IDENTIFIER $@2 . '(' parameters_block ')' function_bodys END IDENTIFIER
 
-    '('  shift, and go to state 96
-
-    '('       [reduce using rule 42 (parameters_block)]
-    $default  reduce using rule 42 (parameters_block)
-
-    parameters_block  go to state 98
+    '('  shift, and go to state 97
 
 
 State 56
@@ -899,7 +890,7 @@ State 56
     REAL_NUM          shift, and go to state 36
     STRING_CONSTANTS  shift, and go to state 37
 
-    constant_exp  go to state 99
+    constant_exp  go to state 98
 
 
 State 57
@@ -907,7 +898,7 @@ State 57
    27 variable: VAR IDENTIFIER type . ASSIGN constant_exp
    28         | VAR IDENTIFIER type .
 
-    ASSIGN  shift, and go to state 100
+    ASSIGN  shift, and go to state 99
 
     $default  reduce using rule 28 (variable)
 
@@ -918,7 +909,7 @@ State 58
 
     $default  reduce using rule 38 (function_bodys)
 
-    function_bodys  go to state 101
+    function_bodys  go to state 100
 
 
 State 59
@@ -935,7 +926,7 @@ State 59
     '('               shift, and go to state 39
 
     constant_exp        go to state 41
-    expression          go to state 102
+    expression          go to state 101
     function_procedure  go to state 45
     array_reference     go to state 46
 
@@ -949,18 +940,18 @@ State 60
 
 State 61
 
-   92 decreasing: DECREASING .
+   94 decreasing: DECREASING .
 
-    $default  reduce using rule 92 (decreasing)
+    $default  reduce using rule 94 (decreasing)
 
 
 State 62
 
-   91 loop: FOR decreasing . $@5 IDENTIFIER $@6 ':' number '.' '.' number $@7 function_bodys END FOR
+   93 loop: FOR decreasing . $@5 IDENTIFIER $@6 ':' number '.' '.' number $@7 function_bodys END FOR
 
-    $default  reduce using rule 88 ($@5)
+    $default  reduce using rule 90 ($@5)
 
-    $@5  go to state 103
+    $@5  go to state 102
 
 
 State 63
@@ -973,13 +964,12 @@ State 63
 State 64
 
    74 expression: IDENTIFIER .
-   78 function_procedure: IDENTIFIER . '(' arguments ')'
+   78 function_procedure: IDENTIFIER . '(' argument_body ')'
    79 array_reference: IDENTIFIER . '[' expression ']'
 
     '('  shift, and go to state 70
     '['  shift, and go to state 71
 
-    '('       [reduce using rule 74 (expression)]
     $default  reduce using rule 74 (expression)
 
 
@@ -999,7 +989,7 @@ State 65
    70           | expression . GE expression
    71           | expression . '>' expression
    72           | expression . NOT_EQU expression
-   83 if_head: IF expression .
+   85 if_head: IF expression .
 
     AND      shift, and go to state 74
     OR       shift, and go to state 75
@@ -1016,16 +1006,16 @@ State 65
     '*'      shift, and go to state 86
     '/'      shift, and go to state 87
 
-    $default  reduce using rule 83 (if_head)
+    $default  reduce using rule 85 (if_head)
 
 
 State 66
 
-   87 loop: LOOP $@4 . function_bodys END LOOP
+   89 loop: LOOP $@4 . function_bodys END LOOP
 
     $default  reduce using rule 38 (function_bodys)
 
-    function_bodys  go to state 104
+    function_bodys  go to state 103
 
 
 State 67
@@ -1116,14 +1106,14 @@ State 69
     '('               shift, and go to state 39
 
     constant_exp        go to state 41
-    expression          go to state 105
+    expression          go to state 104
     function_procedure  go to state 45
     array_reference     go to state 46
 
 
 State 70
 
-   78 function_procedure: IDENTIFIER '(' . arguments ')'
+   78 function_procedure: IDENTIFIER '(' . argument_body ')'
 
     FALSE             shift, and go to state 24
     TRUE              shift, and go to state 33
@@ -1134,10 +1124,13 @@ State 70
     '-'               shift, and go to state 38
     '('               shift, and go to state 39
 
+    $default  reduce using rule 81 (argument_body)
+
     constant_exp        go to state 41
-    expression          go to state 106
+    expression          go to state 105
     function_procedure  go to state 45
     array_reference     go to state 46
+    argument_body       go to state 106
     arguments           go to state 107
     func_expression     go to state 108
 
@@ -1485,8 +1478,8 @@ State 87
 
 State 88
 
-   84 condition: if_head THEN . function_bodys ELSE function_bodys END IF
-   85          | if_head THEN . function_bodys END IF
+   86 condition: if_head THEN . function_bodys ELSE function_bodys END IF
+   87          | if_head THEN . function_bodys END IF
 
     $default  reduce using rule 38 (function_bodys)
 
@@ -1553,40 +1546,38 @@ State 95
 
 State 96
 
-   41 parameters_block: '(' . parameters ')'
+   34 function: FUNCTION IDENTIFIER $@1 '(' . parameters_block ')' type function_bodys END IDENTIFIER
 
     IDENTIFIER  shift, and go to state 130
 
-    parameters  go to state 131
-    parameter   go to state 132
+    $default  reduce using rule 42 (parameters_block)
+
+    parameters_block  go to state 131
+    parameters        go to state 132
+    parameter         go to state 133
 
 
 State 97
 
-   34 function: FUNCTION IDENTIFIER $@1 parameters_block . type function_bodys END IDENTIFIER
+   36 procedure: PROCEDURE IDENTIFIER $@2 '(' . parameters_block ')' function_bodys END IDENTIFIER
 
-    ':'  shift, and go to state 52
+    IDENTIFIER  shift, and go to state 130
 
-    type  go to state 133
+    $default  reduce using rule 42 (parameters_block)
+
+    parameters_block  go to state 134
+    parameters        go to state 132
+    parameter         go to state 133
 
 
 State 98
-
-   36 procedure: PROCEDURE IDENTIFIER $@2 parameters_block . function_bodys END IDENTIFIER
-
-    $default  reduce using rule 38 (function_bodys)
-
-    function_bodys  go to state 134
-
-
-State 99
 
    29 variable: VAR IDENTIFIER ASSIGN constant_exp .
 
     $default  reduce using rule 29 (variable)
 
 
-State 100
+State 99
 
    27 variable: VAR IDENTIFIER type ASSIGN . constant_exp
 
@@ -1599,7 +1590,7 @@ State 100
     constant_exp  go to state 135
 
 
-State 101
+State 100
 
    37 function_bodys: function_bodys . function_body
    47 block: BEGIN_ $@3 function_bodys . END
@@ -1644,7 +1635,7 @@ State 101
     loop                go to state 49
 
 
-State 102
+State 101
 
    56 when: WHEN expression .
    58 expression: expression . '+' expression
@@ -1681,17 +1672,17 @@ State 102
     $default  reduce using rule 56 (when)
 
 
-State 103
+State 102
 
-   91 loop: FOR decreasing $@5 . IDENTIFIER $@6 ':' number '.' '.' number $@7 function_bodys END FOR
+   93 loop: FOR decreasing $@5 . IDENTIFIER $@6 ':' number '.' '.' number $@7 function_bodys END FOR
 
     IDENTIFIER  shift, and go to state 140
 
 
-State 104
+State 103
 
    37 function_bodys: function_bodys . function_body
-   87 loop: LOOP $@4 function_bodys . END LOOP
+   89 loop: LOOP $@4 function_bodys . END LOOP
 
     ARRAY             shift, and go to state 4
     BEGIN_            shift, and go to state 22
@@ -1733,7 +1724,7 @@ State 104
     loop                go to state 49
 
 
-State 105
+State 104
 
    48 simple: IDENTIFIER ASSIGN expression .
    58 expression: expression . '+' expression
@@ -1762,15 +1753,13 @@ State 105
     '='      shift, and go to state 82
     '>'      shift, and go to state 83
     '+'      shift, and go to state 84
-    '-'      shift, and go to state 85
     '*'      shift, and go to state 86
     '/'      shift, and go to state 87
 
-    '-'       [reduce using rule 48 (simple)]
     $default  reduce using rule 48 (simple)
 
 
-State 106
+State 105
 
    58 expression: expression . '+' expression
    59           | expression . '-' expression
@@ -1786,7 +1775,7 @@ State 106
    70           | expression . GE expression
    71           | expression . '>' expression
    72           | expression . NOT_EQU expression
-   82 func_expression: expression .
+   84 func_expression: expression .
 
     AND      shift, and go to state 74
     OR       shift, and go to state 75
@@ -1803,23 +1792,31 @@ State 106
     '*'      shift, and go to state 86
     '/'      shift, and go to state 87
 
-    $default  reduce using rule 82 (func_expression)
+    $default  reduce using rule 84 (func_expression)
+
+
+State 106
+
+   78 function_procedure: IDENTIFIER '(' argument_body . ')'
+
+    ')'  shift, and go to state 142
 
 
 State 107
 
-   78 function_procedure: IDENTIFIER '(' arguments . ')'
-   80 arguments: arguments . ',' func_expression
+   80 argument_body: arguments .
+   82 arguments: arguments . ',' func_expression
 
-    ')'  shift, and go to state 142
     ','  shift, and go to state 143
+
+    $default  reduce using rule 80 (argument_body)
 
 
 State 108
 
-   81 arguments: func_expression .
+   83 arguments: func_expression .
 
-    $default  reduce using rule 81 (arguments)
+    $default  reduce using rule 83 (arguments)
 
 
 State 109
@@ -2244,8 +2241,8 @@ State 124
 State 125
 
    37 function_bodys: function_bodys . function_body
-   84 condition: if_head THEN function_bodys . ELSE function_bodys END IF
-   85          | if_head THEN function_bodys . END IF
+   86 condition: if_head THEN function_bodys . ELSE function_bodys END IF
+   87          | if_head THEN function_bodys . END IF
 
     ARRAY             shift, and go to state 4
     BEGIN_            shift, and go to state 22
@@ -2327,72 +2324,33 @@ State 130
 
 State 131
 
-   41 parameters_block: '(' parameters . ')'
-   43 parameters: parameters . ',' parameter
+   34 function: FUNCTION IDENTIFIER $@1 '(' parameters_block . ')' type function_bodys END IDENTIFIER
 
     ')'  shift, and go to state 149
-    ','  shift, and go to state 150
 
 
 State 132
+
+   41 parameters_block: parameters .
+   43 parameters: parameters . ',' parameter
+
+    ','  shift, and go to state 150
+
+    $default  reduce using rule 41 (parameters_block)
+
+
+State 133
 
    44 parameters: parameter .
 
     $default  reduce using rule 44 (parameters)
 
 
-State 133
-
-   34 function: FUNCTION IDENTIFIER $@1 parameters_block type . function_bodys END IDENTIFIER
-
-    $default  reduce using rule 38 (function_bodys)
-
-    function_bodys  go to state 151
-
-
 State 134
 
-   36 procedure: PROCEDURE IDENTIFIER $@2 parameters_block function_bodys . END IDENTIFIER
-   37 function_bodys: function_bodys . function_body
+   36 procedure: PROCEDURE IDENTIFIER $@2 '(' parameters_block . ')' function_bodys END IDENTIFIER
 
-    ARRAY             shift, and go to state 4
-    BEGIN_            shift, and go to state 22
-    CONST             shift, and go to state 5
-    END               shift, and go to state 152
-    EXIT              shift, and go to state 23
-    FALSE             shift, and go to state 24
-    FOR               shift, and go to state 25
-    GET               shift, and go to state 26
-    IF                shift, and go to state 27
-    LOOP              shift, and go to state 28
-    PUT               shift, and go to state 29
-    RESULT            shift, and go to state 30
-    RETURN            shift, and go to state 31
-    SKIP              shift, and go to state 32
-    TRUE              shift, and go to state 33
-    VAR               shift, and go to state 8
-    IDENTIFIER        shift, and go to state 34
-    INT_NUM           shift, and go to state 35
-    REAL_NUM          shift, and go to state 36
-    STRING_CONSTANTS  shift, and go to state 37
-    '-'               shift, and go to state 38
-    '('               shift, and go to state 39
-
-    statement           go to state 137
-    declaration         go to state 138
-    constants           go to state 12
-    constant_exp        go to state 41
-    variable            go to state 13
-    array               go to state 14
-    function_body       go to state 139
-    block               go to state 42
-    simple              go to state 43
-    expression          go to state 44
-    function_procedure  go to state 45
-    array_reference     go to state 46
-    if_head             go to state 47
-    condition           go to state 48
-    loop                go to state 49
+    ')'  shift, and go to state 151
 
 
 State 135
@@ -2432,30 +2390,30 @@ State 139
 
 State 140
 
-   91 loop: FOR decreasing $@5 IDENTIFIER . $@6 ':' number '.' '.' number $@7 function_bodys END FOR
+   93 loop: FOR decreasing $@5 IDENTIFIER . $@6 ':' number '.' '.' number $@7 function_bodys END FOR
 
-    $default  reduce using rule 89 ($@6)
+    $default  reduce using rule 91 ($@6)
 
-    $@6  go to state 153
+    $@6  go to state 152
 
 
 State 141
 
-   87 loop: LOOP $@4 function_bodys END . LOOP
+   89 loop: LOOP $@4 function_bodys END . LOOP
 
-    LOOP  shift, and go to state 154
+    LOOP  shift, and go to state 153
 
 
 State 142
 
-   78 function_procedure: IDENTIFIER '(' arguments ')' .
+   78 function_procedure: IDENTIFIER '(' argument_body ')' .
 
     $default  reduce using rule 78 (function_procedure)
 
 
 State 143
 
-   80 arguments: arguments ',' . func_expression
+   82 arguments: arguments ',' . func_expression
 
     FALSE             shift, and go to state 24
     TRUE              shift, and go to state 33
@@ -2467,10 +2425,10 @@ State 143
     '('               shift, and go to state 39
 
     constant_exp        go to state 41
-    expression          go to state 106
+    expression          go to state 105
     function_procedure  go to state 45
     array_reference     go to state 46
-    func_expression     go to state 155
+    func_expression     go to state 154
 
 
 State 144
@@ -2482,25 +2440,25 @@ State 144
 
 State 145
 
-   84 condition: if_head THEN function_bodys ELSE . function_bodys END IF
+   86 condition: if_head THEN function_bodys ELSE . function_bodys END IF
 
     $default  reduce using rule 38 (function_bodys)
 
-    function_bodys  go to state 156
+    function_bodys  go to state 155
 
 
 State 146
 
-   85 condition: if_head THEN function_bodys END . IF
+   87 condition: if_head THEN function_bodys END . IF
 
-    IF  shift, and go to state 157
+    IF  shift, and go to state 156
 
 
 State 147
 
    30 array: ARRAY IDENTIFIER ':' ARRAY number '.' . '.' number OF type
 
-    '.'  shift, and go to state 158
+    '.'  shift, and go to state 157
 
 
 State 148
@@ -2512,9 +2470,11 @@ State 148
 
 State 149
 
-   41 parameters_block: '(' parameters ')' .
+   34 function: FUNCTION IDENTIFIER $@1 '(' parameters_block ')' . type function_bodys END IDENTIFIER
 
-    $default  reduce using rule 41 (parameters_block)
+    ':'  shift, and go to state 52
+
+    type  go to state 158
 
 
 State 150
@@ -2528,86 +2488,43 @@ State 150
 
 State 151
 
-   34 function: FUNCTION IDENTIFIER $@1 parameters_block type function_bodys . END IDENTIFIER
-   37 function_bodys: function_bodys . function_body
+   36 procedure: PROCEDURE IDENTIFIER $@2 '(' parameters_block ')' . function_bodys END IDENTIFIER
 
-    ARRAY             shift, and go to state 4
-    BEGIN_            shift, and go to state 22
-    CONST             shift, and go to state 5
-    END               shift, and go to state 160
-    EXIT              shift, and go to state 23
-    FALSE             shift, and go to state 24
-    FOR               shift, and go to state 25
-    GET               shift, and go to state 26
-    IF                shift, and go to state 27
-    LOOP              shift, and go to state 28
-    PUT               shift, and go to state 29
-    RESULT            shift, and go to state 30
-    RETURN            shift, and go to state 31
-    SKIP              shift, and go to state 32
-    TRUE              shift, and go to state 33
-    VAR               shift, and go to state 8
-    IDENTIFIER        shift, and go to state 34
-    INT_NUM           shift, and go to state 35
-    REAL_NUM          shift, and go to state 36
-    STRING_CONSTANTS  shift, and go to state 37
-    '-'               shift, and go to state 38
-    '('               shift, and go to state 39
+    $default  reduce using rule 38 (function_bodys)
 
-    statement           go to state 137
-    declaration         go to state 138
-    constants           go to state 12
-    constant_exp        go to state 41
-    variable            go to state 13
-    array               go to state 14
-    function_body       go to state 139
-    block               go to state 42
-    simple              go to state 43
-    expression          go to state 44
-    function_procedure  go to state 45
-    array_reference     go to state 46
-    if_head             go to state 47
-    condition           go to state 48
-    loop                go to state 49
+    function_bodys  go to state 160
 
 
 State 152
 
-   36 procedure: PROCEDURE IDENTIFIER $@2 parameters_block function_bodys END . IDENTIFIER
+   93 loop: FOR decreasing $@5 IDENTIFIER $@6 . ':' number '.' '.' number $@7 function_bodys END FOR
 
-    IDENTIFIER  shift, and go to state 161
+    ':'  shift, and go to state 161
 
 
 State 153
 
-   91 loop: FOR decreasing $@5 IDENTIFIER $@6 . ':' number '.' '.' number $@7 function_bodys END FOR
+   89 loop: LOOP $@4 function_bodys END LOOP .
 
-    ':'  shift, and go to state 162
+    $default  reduce using rule 89 (loop)
 
 
 State 154
 
-   87 loop: LOOP $@4 function_bodys END LOOP .
+   82 arguments: arguments ',' func_expression .
 
-    $default  reduce using rule 87 (loop)
+    $default  reduce using rule 82 (arguments)
 
 
 State 155
 
-   80 arguments: arguments ',' func_expression .
-
-    $default  reduce using rule 80 (arguments)
-
-
-State 156
-
    37 function_bodys: function_bodys . function_body
-   84 condition: if_head THEN function_bodys ELSE function_bodys . END IF
+   86 condition: if_head THEN function_bodys ELSE function_bodys . END IF
 
     ARRAY             shift, and go to state 4
     BEGIN_            shift, and go to state 22
     CONST             shift, and go to state 5
-    END               shift, and go to state 163
+    END               shift, and go to state 162
     EXIT              shift, and go to state 23
     FALSE             shift, and go to state 24
     FOR               shift, and go to state 25
@@ -2644,21 +2561,30 @@ State 156
     loop                go to state 49
 
 
+State 156
+
+   87 condition: if_head THEN function_bodys END IF .
+
+    $default  reduce using rule 87 (condition)
+
+
 State 157
-
-   85 condition: if_head THEN function_bodys END IF .
-
-    $default  reduce using rule 85 (condition)
-
-
-State 158
 
    30 array: ARRAY IDENTIFIER ':' ARRAY number '.' '.' . number OF type
 
     IDENTIFIER  shift, and go to state 126
     INT_NUM     shift, and go to state 127
 
-    number  go to state 164
+    number  go to state 163
+
+
+State 158
+
+   34 function: FUNCTION IDENTIFIER $@1 '(' parameters_block ')' type . function_bodys END IDENTIFIER
+
+    $default  reduce using rule 38 (function_bodys)
+
+    function_bodys  go to state 164
 
 
 State 159
@@ -2670,123 +2596,13 @@ State 159
 
 State 160
 
-   34 function: FUNCTION IDENTIFIER $@1 parameters_block type function_bodys END . IDENTIFIER
-
-    IDENTIFIER  shift, and go to state 165
-
-
-State 161
-
-   36 procedure: PROCEDURE IDENTIFIER $@2 parameters_block function_bodys END IDENTIFIER .
-
-    $default  reduce using rule 36 (procedure)
-
-
-State 162
-
-   91 loop: FOR decreasing $@5 IDENTIFIER $@6 ':' . number '.' '.' number $@7 function_bodys END FOR
-
-    IDENTIFIER  shift, and go to state 126
-    INT_NUM     shift, and go to state 127
-
-    number  go to state 166
-
-
-State 163
-
-   84 condition: if_head THEN function_bodys ELSE function_bodys END . IF
-
-    IF  shift, and go to state 167
-
-
-State 164
-
-   30 array: ARRAY IDENTIFIER ':' ARRAY number '.' '.' number . OF type
-
-    OF  shift, and go to state 168
-
-
-State 165
-
-   34 function: FUNCTION IDENTIFIER $@1 parameters_block type function_bodys END IDENTIFIER .
-
-    $default  reduce using rule 34 (function)
-
-
-State 166
-
-   91 loop: FOR decreasing $@5 IDENTIFIER $@6 ':' number . '.' '.' number $@7 function_bodys END FOR
-
-    '.'  shift, and go to state 169
-
-
-State 167
-
-   84 condition: if_head THEN function_bodys ELSE function_bodys END IF .
-
-    $default  reduce using rule 84 (condition)
-
-
-State 168
-
-   30 array: ARRAY IDENTIFIER ':' ARRAY number '.' '.' number OF . type
-
-    ':'  shift, and go to state 52
-
-    type  go to state 170
-
-
-State 169
-
-   91 loop: FOR decreasing $@5 IDENTIFIER $@6 ':' number '.' . '.' number $@7 function_bodys END FOR
-
-    '.'  shift, and go to state 171
-
-
-State 170
-
-   30 array: ARRAY IDENTIFIER ':' ARRAY number '.' '.' number OF type .
-
-    $default  reduce using rule 30 (array)
-
-
-State 171
-
-   91 loop: FOR decreasing $@5 IDENTIFIER $@6 ':' number '.' '.' . number $@7 function_bodys END FOR
-
-    IDENTIFIER  shift, and go to state 126
-    INT_NUM     shift, and go to state 127
-
-    number  go to state 172
-
-
-State 172
-
-   91 loop: FOR decreasing $@5 IDENTIFIER $@6 ':' number '.' '.' number . $@7 function_bodys END FOR
-
-    $default  reduce using rule 90 ($@7)
-
-    $@7  go to state 173
-
-
-State 173
-
-   91 loop: FOR decreasing $@5 IDENTIFIER $@6 ':' number '.' '.' number $@7 . function_bodys END FOR
-
-    $default  reduce using rule 38 (function_bodys)
-
-    function_bodys  go to state 174
-
-
-State 174
-
+   36 procedure: PROCEDURE IDENTIFIER $@2 '(' parameters_block ')' function_bodys . END IDENTIFIER
    37 function_bodys: function_bodys . function_body
-   91 loop: FOR decreasing $@5 IDENTIFIER $@6 ':' number '.' '.' number $@7 function_bodys . END FOR
 
     ARRAY             shift, and go to state 4
     BEGIN_            shift, and go to state 22
     CONST             shift, and go to state 5
-    END               shift, and go to state 175
+    END               shift, and go to state 165
     EXIT              shift, and go to state 23
     FALSE             shift, and go to state 24
     FOR               shift, and go to state 25
@@ -2823,15 +2639,222 @@ State 174
     loop                go to state 49
 
 
+State 161
+
+   93 loop: FOR decreasing $@5 IDENTIFIER $@6 ':' . number '.' '.' number $@7 function_bodys END FOR
+
+    IDENTIFIER  shift, and go to state 126
+    INT_NUM     shift, and go to state 127
+
+    number  go to state 166
+
+
+State 162
+
+   86 condition: if_head THEN function_bodys ELSE function_bodys END . IF
+
+    IF  shift, and go to state 167
+
+
+State 163
+
+   30 array: ARRAY IDENTIFIER ':' ARRAY number '.' '.' number . OF type
+
+    OF  shift, and go to state 168
+
+
+State 164
+
+   34 function: FUNCTION IDENTIFIER $@1 '(' parameters_block ')' type function_bodys . END IDENTIFIER
+   37 function_bodys: function_bodys . function_body
+
+    ARRAY             shift, and go to state 4
+    BEGIN_            shift, and go to state 22
+    CONST             shift, and go to state 5
+    END               shift, and go to state 169
+    EXIT              shift, and go to state 23
+    FALSE             shift, and go to state 24
+    FOR               shift, and go to state 25
+    GET               shift, and go to state 26
+    IF                shift, and go to state 27
+    LOOP              shift, and go to state 28
+    PUT               shift, and go to state 29
+    RESULT            shift, and go to state 30
+    RETURN            shift, and go to state 31
+    SKIP              shift, and go to state 32
+    TRUE              shift, and go to state 33
+    VAR               shift, and go to state 8
+    IDENTIFIER        shift, and go to state 34
+    INT_NUM           shift, and go to state 35
+    REAL_NUM          shift, and go to state 36
+    STRING_CONSTANTS  shift, and go to state 37
+    '-'               shift, and go to state 38
+    '('               shift, and go to state 39
+
+    statement           go to state 137
+    declaration         go to state 138
+    constants           go to state 12
+    constant_exp        go to state 41
+    variable            go to state 13
+    array               go to state 14
+    function_body       go to state 139
+    block               go to state 42
+    simple              go to state 43
+    expression          go to state 44
+    function_procedure  go to state 45
+    array_reference     go to state 46
+    if_head             go to state 47
+    condition           go to state 48
+    loop                go to state 49
+
+
+State 165
+
+   36 procedure: PROCEDURE IDENTIFIER $@2 '(' parameters_block ')' function_bodys END . IDENTIFIER
+
+    IDENTIFIER  shift, and go to state 170
+
+
+State 166
+
+   93 loop: FOR decreasing $@5 IDENTIFIER $@6 ':' number . '.' '.' number $@7 function_bodys END FOR
+
+    '.'  shift, and go to state 171
+
+
+State 167
+
+   86 condition: if_head THEN function_bodys ELSE function_bodys END IF .
+
+    $default  reduce using rule 86 (condition)
+
+
+State 168
+
+   30 array: ARRAY IDENTIFIER ':' ARRAY number '.' '.' number OF . type
+
+    ':'  shift, and go to state 52
+
+    type  go to state 172
+
+
+State 169
+
+   34 function: FUNCTION IDENTIFIER $@1 '(' parameters_block ')' type function_bodys END . IDENTIFIER
+
+    IDENTIFIER  shift, and go to state 173
+
+
+State 170
+
+   36 procedure: PROCEDURE IDENTIFIER $@2 '(' parameters_block ')' function_bodys END IDENTIFIER .
+
+    $default  reduce using rule 36 (procedure)
+
+
+State 171
+
+   93 loop: FOR decreasing $@5 IDENTIFIER $@6 ':' number '.' . '.' number $@7 function_bodys END FOR
+
+    '.'  shift, and go to state 174
+
+
+State 172
+
+   30 array: ARRAY IDENTIFIER ':' ARRAY number '.' '.' number OF type .
+
+    $default  reduce using rule 30 (array)
+
+
+State 173
+
+   34 function: FUNCTION IDENTIFIER $@1 '(' parameters_block ')' type function_bodys END IDENTIFIER .
+
+    $default  reduce using rule 34 (function)
+
+
+State 174
+
+   93 loop: FOR decreasing $@5 IDENTIFIER $@6 ':' number '.' '.' . number $@7 function_bodys END FOR
+
+    IDENTIFIER  shift, and go to state 126
+    INT_NUM     shift, and go to state 127
+
+    number  go to state 175
+
+
 State 175
 
-   91 loop: FOR decreasing $@5 IDENTIFIER $@6 ':' number '.' '.' number $@7 function_bodys END . FOR
+   93 loop: FOR decreasing $@5 IDENTIFIER $@6 ':' number '.' '.' number . $@7 function_bodys END FOR
 
-    FOR  shift, and go to state 176
+    $default  reduce using rule 92 ($@7)
+
+    $@7  go to state 176
 
 
 State 176
 
-   91 loop: FOR decreasing $@5 IDENTIFIER $@6 ':' number '.' '.' number $@7 function_bodys END FOR .
+   93 loop: FOR decreasing $@5 IDENTIFIER $@6 ':' number '.' '.' number $@7 . function_bodys END FOR
 
-    $default  reduce using rule 91 (loop)
+    $default  reduce using rule 38 (function_bodys)
+
+    function_bodys  go to state 177
+
+
+State 177
+
+   37 function_bodys: function_bodys . function_body
+   93 loop: FOR decreasing $@5 IDENTIFIER $@6 ':' number '.' '.' number $@7 function_bodys . END FOR
+
+    ARRAY             shift, and go to state 4
+    BEGIN_            shift, and go to state 22
+    CONST             shift, and go to state 5
+    END               shift, and go to state 178
+    EXIT              shift, and go to state 23
+    FALSE             shift, and go to state 24
+    FOR               shift, and go to state 25
+    GET               shift, and go to state 26
+    IF                shift, and go to state 27
+    LOOP              shift, and go to state 28
+    PUT               shift, and go to state 29
+    RESULT            shift, and go to state 30
+    RETURN            shift, and go to state 31
+    SKIP              shift, and go to state 32
+    TRUE              shift, and go to state 33
+    VAR               shift, and go to state 8
+    IDENTIFIER        shift, and go to state 34
+    INT_NUM           shift, and go to state 35
+    REAL_NUM          shift, and go to state 36
+    STRING_CONSTANTS  shift, and go to state 37
+    '-'               shift, and go to state 38
+    '('               shift, and go to state 39
+
+    statement           go to state 137
+    declaration         go to state 138
+    constants           go to state 12
+    constant_exp        go to state 41
+    variable            go to state 13
+    array               go to state 14
+    function_body       go to state 139
+    block               go to state 42
+    simple              go to state 43
+    expression          go to state 44
+    function_procedure  go to state 45
+    array_reference     go to state 46
+    if_head             go to state 47
+    condition           go to state 48
+    loop                go to state 49
+
+
+State 178
+
+   93 loop: FOR decreasing $@5 IDENTIFIER $@6 ':' number '.' '.' number $@7 function_bodys END . FOR
+
+    FOR  shift, and go to state 179
+
+
+State 179
+
+   93 loop: FOR decreasing $@5 IDENTIFIER $@6 ':' number '.' '.' number $@7 function_bodys END FOR .
+
+    $default  reduce using rule 93 (loop)

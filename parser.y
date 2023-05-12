@@ -36,6 +36,8 @@ int param_num = 0;
 %left '+' '-'
 %left '*' '/' MOD
 %nonassoc UMINUS
+%precedence IDENTIFIER
+%precedence ASSIGN '(' '['
 
 %%
 program:    declarations statements
@@ -167,6 +169,9 @@ array:  ARRAY IDENTIFIER ':' ARRAY number '.' '.' number OF type
                 /* check if the identifier is already in the symbol table */
                 if(symtab.global_lookup(*($2)) != NULL)
                         yyerror("array redefine");
+                
+                if($5->S_flag!=flag::CONSTANT || $8->S_flag!=flag::CONSTANT)
+                        yyerror("array index must be constant");
 
                 if($5->S_type != type::INT_TYPE || $8->S_type != type::INT_TYPE)
                         yyerror("array index must be integer");
@@ -206,16 +211,16 @@ function:  FUNCTION IDENTIFIER
                 symtab.push();
                 param_num = 0;
         }
-        parameters_block type function_bodys END IDENTIFIER
+        '(' parameters_block ')' type function_bodys END IDENTIFIER
         {
                 cout<<"<-----------------------local variable------------------->"<<endl;
                 symtab.tables.back().dump();
                 cout<<"<-----------------------local variable end--------------->"<<endl;
                 symtab.pop();
-                symtab.tables.back().table.back().S_type = $5;
+                symtab.tables.back().table.back().S_type = $7;
                 symtab.tables.back().table.back().param_num = param_num;
                 param_num = 0;
-                if (*$2 != *$8)
+                if (*$2 != *$10)
                         yyerror("function declaration error");
         }
         ;
@@ -233,7 +238,7 @@ procedure:  PROCEDURE IDENTIFIER
                 symtab.push();
                 param_num = 0;
         }
-        parameters_block function_bodys END IDENTIFIER
+        '(' parameters_block ')' function_bodys END IDENTIFIER
         {
                 cout<<"<-----------------------local variable------------------->"<<endl;
                 symtab.tables.back().dump();
@@ -241,7 +246,7 @@ procedure:  PROCEDURE IDENTIFIER
                 symtab.pop();
                 symtab.tables.back().table.back().param_num = param_num;
                 param_num = 0;
-                if (*$2 != *$7)
+                if (*$2 != *$9)
                         yyerror("function declaration error");
         }
         ;
@@ -251,7 +256,7 @@ function_bodys:  function_bodys function_body
 function_body:  declaration
         |   statement
         ;
-parameters_block:   '(' parameters ')'
+parameters_block:  parameters
         |
         ;
 parameters:     parameters ',' parameter
@@ -538,14 +543,17 @@ expression:    expression '+' expression
                 /* check if the identifier is in the symbol table */
                 if(symtab.global_lookup(*($1)) == NULL)
                         yyerror("Not defined error");
-                else
-                        $$ = symtab.global_lookup(*($1));
+                
+                if(symtab.global_lookup(*($1))->S_flag == flag::FUNC)
+                        yyerror("Not a variable error");
+                        
+                $$ = symtab.global_lookup(*($1));
         }
         |   constant_exp
         |   function_procedure
         |   array_reference
         ;
-function_procedure:     IDENTIFIER '(' arguments ')'
+function_procedure:     IDENTIFIER '(' argument_body ')'
         {
                 /* check if the identifier is in the symbol table */
                 if(symtab.global_lookup(*($1)) == NULL)
@@ -575,6 +583,9 @@ array_reference:    IDENTIFIER '[' expression ']'
                 else                        
                         $$ = symtab.global_lookup(*($1));
         }
+        ;
+argument_body:  arguments
+        |
         ;
 arguments:  arguments ',' func_expression
         |   func_expression
@@ -623,6 +634,9 @@ loop:   LOOP
         }
         ':' number '.' '.' number
         {
+                if($7->S_flag != flag::CONSTANT || $10->S_flag != flag::CONSTANT)
+                        yyerror("Index must be a variable");
+
                 if($7->S_type != type::INT_TYPE || $10->S_type != type::INT_TYPE)
                         yyerror("Index must be an integer");
         }
