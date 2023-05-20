@@ -29,7 +29,7 @@ int param_num = 0;
 %type <var_type> type
 
 /* precedence */
-%left OR
+%nonassoc OR
 %left AND
 %left NOT
 %left '<' LE '=' GE '>' NOT_EQU

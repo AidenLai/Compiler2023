@@ -1962,6 +1962,8 @@ State 113
     '*'      shift, and go to state 87
     '/'      shift, and go to state 88
 
+    OR  error (nonassociative)
+
     $default  reduce using rule 65 (expression)
 
 
