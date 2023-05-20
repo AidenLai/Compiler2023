@@ -438,15 +438,11 @@ expression:    expression '+' expression
                 else
                         yyerror("operator error");
         }
-        |   expression NOT expression
+        |   NOT expression
         {
-                /* type check */
-                if($1->S_type != $3->S_type)
-                        yyerror("type mismatch");
-
                 
-                if($1->S_type == type::BOOL_TYPE)
-                        $$ = boolConst(!($3->S_data.bool_data));
+                if($2->S_type == type::BOOL_TYPE)
+                        $$ = $2;
                 else
                         yyerror("operator error");
         }

@@ -5,10 +5,10 @@ Terminals unused in grammar
    DO
 
 
-State 44 conflicts: 1 shift/reduce
-State 67 conflicts: 1 shift/reduce
+State 45 conflicts: 1 shift/reduce
 State 68 conflicts: 1 shift/reduce
-State 101 conflicts: 1 shift/reduce
+State 69 conflicts: 1 shift/reduce
+State 102 conflicts: 1 shift/reduce
 
 
 Grammar
@@ -105,7 +105,7 @@ Grammar
    63           | '-' expression
    64           | expression AND expression
    65           | expression OR expression
-   66           | expression NOT expression
+   66           | NOT expression
    67           | expression '<' expression
    68           | expression LE expression
    69           | expression '=' expression
@@ -402,25 +402,26 @@ State 9
     RETURN            shift, and go to state 31
     SKIP              shift, and go to state 32
     TRUE              shift, and go to state 33
-    IDENTIFIER        shift, and go to state 34
-    INT_NUM           shift, and go to state 35
-    REAL_NUM          shift, and go to state 36
-    STRING_CONSTANTS  shift, and go to state 37
-    '-'               shift, and go to state 38
-    '('               shift, and go to state 39
+    NOT               shift, and go to state 34
+    IDENTIFIER        shift, and go to state 35
+    INT_NUM           shift, and go to state 36
+    REAL_NUM          shift, and go to state 37
+    STRING_CONSTANTS  shift, and go to state 38
+    '-'               shift, and go to state 39
+    '('               shift, and go to state 40
 
     $default  reduce using rule 1 (program)
 
-    statement           go to state 40
-    constant_exp        go to state 41
-    block               go to state 42
-    simple              go to state 43
-    expression          go to state 44
-    function_procedure  go to state 45
-    array_reference     go to state 46
-    if_head             go to state 47
-    condition           go to state 48
-    loop                go to state 49
+    statement           go to state 41
+    constant_exp        go to state 42
+    block               go to state 43
+    simple              go to state 44
+    expression          go to state 45
+    function_procedure  go to state 46
+    array_reference     go to state 47
+    if_head             go to state 48
+    condition           go to state 49
+    loop                go to state 50
 
 
 State 10
@@ -476,7 +477,7 @@ State 17
 
    30 array: ARRAY IDENTIFIER . ':' ARRAY number '.' '.' number OF type
 
-    ':'  shift, and go to state 50
+    ':'  shift, and go to state 51
 
 
 State 18
@@ -484,10 +485,10 @@ State 18
    16 constants: CONST IDENTIFIER . type ASSIGN constant_exp
    17          | CONST IDENTIFIER . ASSIGN constant_exp
 
-    ASSIGN  shift, and go to state 51
-    ':'     shift, and go to state 52
+    ASSIGN  shift, and go to state 52
+    ':'     shift, and go to state 53
 
-    type  go to state 53
+    type  go to state 54
 
 
 State 19
@@ -496,7 +497,7 @@ State 19
 
     $default  reduce using rule 33 ($@1)
 
-    $@1  go to state 54
+    $@1  go to state 55
 
 
 State 20
@@ -505,7 +506,7 @@ State 20
 
     $default  reduce using rule 35 ($@2)
 
-    $@2  go to state 55
+    $@2  go to state 56
 
 
 State 21
@@ -514,10 +515,10 @@ State 21
    28         | VAR IDENTIFIER . type
    29         | VAR IDENTIFIER . ASSIGN constant_exp
 
-    ASSIGN  shift, and go to state 56
-    ':'     shift, and go to state 52
+    ASSIGN  shift, and go to state 57
+    ':'     shift, and go to state 53
 
-    type  go to state 57
+    type  go to state 58
 
 
 State 22
@@ -526,18 +527,18 @@ State 22
 
     $default  reduce using rule 46 ($@3)
 
-    $@3  go to state 58
+    $@3  go to state 59
 
 
 State 23
 
    53 simple: EXIT . when
 
-    WHEN  shift, and go to state 59
+    WHEN  shift, and go to state 60
 
     $default  reduce using rule 57 (when)
 
-    when  go to state 60
+    when  go to state 61
 
 
 State 24
@@ -551,18 +552,18 @@ State 25
 
    93 loop: FOR . decreasing $@5 IDENTIFIER $@6 ':' number '.' '.' number $@7 function_bodys END FOR
 
-    DECREASING  shift, and go to state 61
+    DECREASING  shift, and go to state 62
 
     $default  reduce using rule 95 (decreasing)
 
-    decreasing  go to state 62
+    decreasing  go to state 63
 
 
 State 26
 
    50 simple: GET . IDENTIFIER
 
-    IDENTIFIER  shift, and go to state 63
+    IDENTIFIER  shift, and go to state 64
 
 
 State 27
@@ -571,17 +572,18 @@ State 27
 
     FALSE             shift, and go to state 24
     TRUE              shift, and go to state 33
-    IDENTIFIER        shift, and go to state 64
-    INT_NUM           shift, and go to state 35
-    REAL_NUM          shift, and go to state 36
-    STRING_CONSTANTS  shift, and go to state 37
-    '-'               shift, and go to state 38
-    '('               shift, and go to state 39
+    NOT               shift, and go to state 34
+    IDENTIFIER        shift, and go to state 65
+    INT_NUM           shift, and go to state 36
+    REAL_NUM          shift, and go to state 37
+    STRING_CONSTANTS  shift, and go to state 38
+    '-'               shift, and go to state 39
+    '('               shift, and go to state 40
 
-    constant_exp        go to state 41
-    expression          go to state 65
-    function_procedure  go to state 45
-    array_reference     go to state 46
+    constant_exp        go to state 42
+    expression          go to state 66
+    function_procedure  go to state 46
+    array_reference     go to state 47
 
 
 State 28
@@ -590,7 +592,7 @@ State 28
 
     $default  reduce using rule 88 ($@4)
 
-    $@4  go to state 66
+    $@4  go to state 67
 
 
 State 29
@@ -599,17 +601,18 @@ State 29
 
     FALSE             shift, and go to state 24
     TRUE              shift, and go to state 33
-    IDENTIFIER        shift, and go to state 64
-    INT_NUM           shift, and go to state 35
-    REAL_NUM          shift, and go to state 36
-    STRING_CONSTANTS  shift, and go to state 37
-    '-'               shift, and go to state 38
-    '('               shift, and go to state 39
+    NOT               shift, and go to state 34
+    IDENTIFIER        shift, and go to state 65
+    INT_NUM           shift, and go to state 36
+    REAL_NUM          shift, and go to state 37
+    STRING_CONSTANTS  shift, and go to state 38
+    '-'               shift, and go to state 39
+    '('               shift, and go to state 40
 
-    constant_exp        go to state 41
-    expression          go to state 67
-    function_procedure  go to state 45
-    array_reference     go to state 46
+    constant_exp        go to state 42
+    expression          go to state 68
+    function_procedure  go to state 46
+    array_reference     go to state 47
 
 
 State 30
@@ -618,17 +621,18 @@ State 30
 
     FALSE             shift, and go to state 24
     TRUE              shift, and go to state 33
-    IDENTIFIER        shift, and go to state 64
-    INT_NUM           shift, and go to state 35
-    REAL_NUM          shift, and go to state 36
-    STRING_CONSTANTS  shift, and go to state 37
-    '-'               shift, and go to state 38
-    '('               shift, and go to state 39
+    NOT               shift, and go to state 34
+    IDENTIFIER        shift, and go to state 65
+    INT_NUM           shift, and go to state 36
+    REAL_NUM          shift, and go to state 37
+    STRING_CONSTANTS  shift, and go to state 38
+    '-'               shift, and go to state 39
+    '('               shift, and go to state 40
 
-    constant_exp        go to state 41
-    expression          go to state 68
-    function_procedure  go to state 45
-    array_reference     go to state 46
+    constant_exp        go to state 42
+    expression          go to state 69
+    function_procedure  go to state 46
+    array_reference     go to state 47
 
 
 State 31
@@ -654,106 +658,128 @@ State 33
 
 State 34
 
+   66 expression: NOT . expression
+
+    FALSE             shift, and go to state 24
+    TRUE              shift, and go to state 33
+    NOT               shift, and go to state 34
+    IDENTIFIER        shift, and go to state 65
+    INT_NUM           shift, and go to state 36
+    REAL_NUM          shift, and go to state 37
+    STRING_CONSTANTS  shift, and go to state 38
+    '-'               shift, and go to state 39
+    '('               shift, and go to state 40
+
+    constant_exp        go to state 42
+    expression          go to state 70
+    function_procedure  go to state 46
+    array_reference     go to state 47
+
+
+State 35
+
    48 simple: IDENTIFIER . ASSIGN expression
    74 expression: IDENTIFIER .
    78 function_procedure: IDENTIFIER . '(' argument_body ')'
    79 array_reference: IDENTIFIER . '[' expression ']'
 
-    ASSIGN  shift, and go to state 69
-    '('     shift, and go to state 70
-    '['     shift, and go to state 71
+    ASSIGN  shift, and go to state 71
+    '('     shift, and go to state 72
+    '['     shift, and go to state 73
 
     $default  reduce using rule 74 (expression)
 
 
-State 35
+State 36
 
    22 constant_exp: INT_NUM .
 
     $default  reduce using rule 22 (constant_exp)
 
 
-State 36
+State 37
 
    23 constant_exp: REAL_NUM .
 
     $default  reduce using rule 23 (constant_exp)
 
 
-State 37
+State 38
 
    24 constant_exp: STRING_CONSTANTS .
 
     $default  reduce using rule 24 (constant_exp)
 
 
-State 38
+State 39
 
    63 expression: '-' . expression
 
     FALSE             shift, and go to state 24
     TRUE              shift, and go to state 33
-    IDENTIFIER        shift, and go to state 64
-    INT_NUM           shift, and go to state 35
-    REAL_NUM          shift, and go to state 36
-    STRING_CONSTANTS  shift, and go to state 37
-    '-'               shift, and go to state 38
-    '('               shift, and go to state 39
+    NOT               shift, and go to state 34
+    IDENTIFIER        shift, and go to state 65
+    INT_NUM           shift, and go to state 36
+    REAL_NUM          shift, and go to state 37
+    STRING_CONSTANTS  shift, and go to state 38
+    '-'               shift, and go to state 39
+    '('               shift, and go to state 40
 
-    constant_exp        go to state 41
-    expression          go to state 72
-    function_procedure  go to state 45
-    array_reference     go to state 46
+    constant_exp        go to state 42
+    expression          go to state 74
+    function_procedure  go to state 46
+    array_reference     go to state 47
 
 
-State 39
+State 40
 
    73 expression: '(' . expression ')'
 
     FALSE             shift, and go to state 24
     TRUE              shift, and go to state 33
-    IDENTIFIER        shift, and go to state 64
-    INT_NUM           shift, and go to state 35
-    REAL_NUM          shift, and go to state 36
-    STRING_CONSTANTS  shift, and go to state 37
-    '-'               shift, and go to state 38
-    '('               shift, and go to state 39
+    NOT               shift, and go to state 34
+    IDENTIFIER        shift, and go to state 65
+    INT_NUM           shift, and go to state 36
+    REAL_NUM          shift, and go to state 37
+    STRING_CONSTANTS  shift, and go to state 38
+    '-'               shift, and go to state 39
+    '('               shift, and go to state 40
 
-    constant_exp        go to state 41
-    expression          go to state 73
-    function_procedure  go to state 45
-    array_reference     go to state 46
+    constant_exp        go to state 42
+    expression          go to state 75
+    function_procedure  go to state 46
+    array_reference     go to state 47
 
 
-State 40
+State 41
 
     2 statements: statements statement .
 
     $default  reduce using rule 2 (statements)
 
 
-State 41
+State 42
 
    75 expression: constant_exp .
 
     $default  reduce using rule 75 (expression)
 
 
-State 42
+State 43
 
     4 statement: block .
 
     $default  reduce using rule 4 (statement)
 
 
-State 43
+State 44
 
     5 statement: simple .
 
     $default  reduce using rule 5 (statement)
 
 
-State 44
+State 45
 
    55 simple: expression .
    58 expression: expression . '+' expression
@@ -763,7 +789,6 @@ State 44
    62           | expression . MOD expression
    64           | expression . AND expression
    65           | expression . OR expression
-   66           | expression . NOT expression
    67           | expression . '<' expression
    68           | expression . LE expression
    69           | expression . '=' expression
@@ -771,209 +796,209 @@ State 44
    71           | expression . '>' expression
    72           | expression . NOT_EQU expression
 
-    AND      shift, and go to state 74
-    OR       shift, and go to state 75
-    NOT      shift, and go to state 76
-    NOT_EQU  shift, and go to state 77
-    LE       shift, and go to state 78
-    GE       shift, and go to state 79
-    MOD      shift, and go to state 80
-    '<'      shift, and go to state 81
-    '='      shift, and go to state 82
-    '>'      shift, and go to state 83
-    '+'      shift, and go to state 84
-    '-'      shift, and go to state 85
-    '*'      shift, and go to state 86
-    '/'      shift, and go to state 87
+    AND      shift, and go to state 76
+    OR       shift, and go to state 77
+    NOT_EQU  shift, and go to state 78
+    LE       shift, and go to state 79
+    GE       shift, and go to state 80
+    MOD      shift, and go to state 81
+    '<'      shift, and go to state 82
+    '='      shift, and go to state 83
+    '>'      shift, and go to state 84
+    '+'      shift, and go to state 85
+    '-'      shift, and go to state 86
+    '*'      shift, and go to state 87
+    '/'      shift, and go to state 88
 
     '-'       [reduce using rule 55 (simple)]
     $default  reduce using rule 55 (simple)
 
 
-State 45
+State 46
 
    76 expression: function_procedure .
 
     $default  reduce using rule 76 (expression)
 
 
-State 46
+State 47
 
    77 expression: array_reference .
 
     $default  reduce using rule 77 (expression)
 
 
-State 47
+State 48
 
    86 condition: if_head . THEN function_bodys ELSE function_bodys END IF
    87          | if_head . THEN function_bodys END IF
 
-    THEN  shift, and go to state 88
+    THEN  shift, and go to state 89
 
 
-State 48
+State 49
 
     6 statement: condition .
 
     $default  reduce using rule 6 (statement)
 
 
-State 49
+State 50
 
     7 statement: loop .
 
     $default  reduce using rule 7 (statement)
 
 
-State 50
+State 51
 
    30 array: ARRAY IDENTIFIER ':' . ARRAY number '.' '.' number OF type
 
-    ARRAY  shift, and go to state 89
+    ARRAY  shift, and go to state 90
 
 
-State 51
+State 52
 
    17 constants: CONST IDENTIFIER ASSIGN . constant_exp
 
     FALSE             shift, and go to state 24
     TRUE              shift, and go to state 33
-    INT_NUM           shift, and go to state 35
-    REAL_NUM          shift, and go to state 36
-    STRING_CONSTANTS  shift, and go to state 37
+    INT_NUM           shift, and go to state 36
+    REAL_NUM          shift, and go to state 37
+    STRING_CONSTANTS  shift, and go to state 38
 
-    constant_exp  go to state 90
+    constant_exp  go to state 91
 
 
-State 52
+State 53
 
    18 type: ':' . INT
    19     | ':' . REAL
    20     | ':' . BOOL
    21     | ':' . STRING
 
-    BOOL    shift, and go to state 91
-    INT     shift, and go to state 92
-    REAL    shift, and go to state 93
-    STRING  shift, and go to state 94
-
-
-State 53
-
-   16 constants: CONST IDENTIFIER type . ASSIGN constant_exp
-
-    ASSIGN  shift, and go to state 95
+    BOOL    shift, and go to state 92
+    INT     shift, and go to state 93
+    REAL    shift, and go to state 94
+    STRING  shift, and go to state 95
 
 
 State 54
 
-   34 function: FUNCTION IDENTIFIER $@1 . '(' parameters_block ')' type function_bodys END IDENTIFIER
+   16 constants: CONST IDENTIFIER type . ASSIGN constant_exp
 
-    '('  shift, and go to state 96
+    ASSIGN  shift, and go to state 96
 
 
 State 55
 
-   36 procedure: PROCEDURE IDENTIFIER $@2 . '(' parameters_block ')' function_bodys END IDENTIFIER
+   34 function: FUNCTION IDENTIFIER $@1 . '(' parameters_block ')' type function_bodys END IDENTIFIER
 
     '('  shift, and go to state 97
 
 
 State 56
 
-   29 variable: VAR IDENTIFIER ASSIGN . constant_exp
+   36 procedure: PROCEDURE IDENTIFIER $@2 . '(' parameters_block ')' function_bodys END IDENTIFIER
 
-    FALSE             shift, and go to state 24
-    TRUE              shift, and go to state 33
-    INT_NUM           shift, and go to state 35
-    REAL_NUM          shift, and go to state 36
-    STRING_CONSTANTS  shift, and go to state 37
-
-    constant_exp  go to state 98
+    '('  shift, and go to state 98
 
 
 State 57
 
+   29 variable: VAR IDENTIFIER ASSIGN . constant_exp
+
+    FALSE             shift, and go to state 24
+    TRUE              shift, and go to state 33
+    INT_NUM           shift, and go to state 36
+    REAL_NUM          shift, and go to state 37
+    STRING_CONSTANTS  shift, and go to state 38
+
+    constant_exp  go to state 99
+
+
+State 58
+
    27 variable: VAR IDENTIFIER type . ASSIGN constant_exp
    28         | VAR IDENTIFIER type .
 
-    ASSIGN  shift, and go to state 99
+    ASSIGN  shift, and go to state 100
 
     $default  reduce using rule 28 (variable)
 
 
-State 58
+State 59
 
    47 block: BEGIN_ $@3 . function_bodys END
 
     $default  reduce using rule 38 (function_bodys)
 
-    function_bodys  go to state 100
+    function_bodys  go to state 101
 
 
-State 59
+State 60
 
    56 when: WHEN . expression
 
     FALSE             shift, and go to state 24
     TRUE              shift, and go to state 33
-    IDENTIFIER        shift, and go to state 64
-    INT_NUM           shift, and go to state 35
-    REAL_NUM          shift, and go to state 36
-    STRING_CONSTANTS  shift, and go to state 37
-    '-'               shift, and go to state 38
-    '('               shift, and go to state 39
+    NOT               shift, and go to state 34
+    IDENTIFIER        shift, and go to state 65
+    INT_NUM           shift, and go to state 36
+    REAL_NUM          shift, and go to state 37
+    STRING_CONSTANTS  shift, and go to state 38
+    '-'               shift, and go to state 39
+    '('               shift, and go to state 40
 
-    constant_exp        go to state 41
-    expression          go to state 101
-    function_procedure  go to state 45
-    array_reference     go to state 46
+    constant_exp        go to state 42
+    expression          go to state 102
+    function_procedure  go to state 46
+    array_reference     go to state 47
 
 
-State 60
+State 61
 
    53 simple: EXIT when .
 
     $default  reduce using rule 53 (simple)
 
 
-State 61
+State 62
 
    94 decreasing: DECREASING .
 
     $default  reduce using rule 94 (decreasing)
 
 
-State 62
+State 63
 
    93 loop: FOR decreasing . $@5 IDENTIFIER $@6 ':' number '.' '.' number $@7 function_bodys END FOR
 
     $default  reduce using rule 90 ($@5)
 
-    $@5  go to state 102
+    $@5  go to state 103
 
 
-State 63
+State 64
 
    50 simple: GET IDENTIFIER .
 
     $default  reduce using rule 50 (simple)
 
 
-State 64
+State 65
 
    74 expression: IDENTIFIER .
    78 function_procedure: IDENTIFIER . '(' argument_body ')'
    79 array_reference: IDENTIFIER . '[' expression ']'
 
-    '('  shift, and go to state 70
-    '['  shift, and go to state 71
+    '('  shift, and go to state 72
+    '['  shift, and go to state 73
 
     $default  reduce using rule 74 (expression)
 
 
-State 65
+State 66
 
    58 expression: expression . '+' expression
    59           | expression . '-' expression
@@ -982,7 +1007,6 @@ State 65
    62           | expression . MOD expression
    64           | expression . AND expression
    65           | expression . OR expression
-   66           | expression . NOT expression
    67           | expression . '<' expression
    68           | expression . LE expression
    69           | expression . '=' expression
@@ -991,34 +1015,33 @@ State 65
    72           | expression . NOT_EQU expression
    85 if_head: IF expression .
 
-    AND      shift, and go to state 74
-    OR       shift, and go to state 75
-    NOT      shift, and go to state 76
-    NOT_EQU  shift, and go to state 77
-    LE       shift, and go to state 78
-    GE       shift, and go to state 79
-    MOD      shift, and go to state 80
-    '<'      shift, and go to state 81
-    '='      shift, and go to state 82
-    '>'      shift, and go to state 83
-    '+'      shift, and go to state 84
-    '-'      shift, and go to state 85
-    '*'      shift, and go to state 86
-    '/'      shift, and go to state 87
+    AND      shift, and go to state 76
+    OR       shift, and go to state 77
+    NOT_EQU  shift, and go to state 78
+    LE       shift, and go to state 79
+    GE       shift, and go to state 80
+    MOD      shift, and go to state 81
+    '<'      shift, and go to state 82
+    '='      shift, and go to state 83
+    '>'      shift, and go to state 84
+    '+'      shift, and go to state 85
+    '-'      shift, and go to state 86
+    '*'      shift, and go to state 87
+    '/'      shift, and go to state 88
 
     $default  reduce using rule 85 (if_head)
 
 
-State 66
+State 67
 
    89 loop: LOOP $@4 . function_bodys END LOOP
 
     $default  reduce using rule 38 (function_bodys)
 
-    function_bodys  go to state 103
+    function_bodys  go to state 104
 
 
-State 67
+State 68
 
    49 simple: PUT expression .
    58 expression: expression . '+' expression
@@ -1028,7 +1051,6 @@ State 67
    62           | expression . MOD expression
    64           | expression . AND expression
    65           | expression . OR expression
-   66           | expression . NOT expression
    67           | expression . '<' expression
    68           | expression . LE expression
    69           | expression . '=' expression
@@ -1036,26 +1058,25 @@ State 67
    71           | expression . '>' expression
    72           | expression . NOT_EQU expression
 
-    AND      shift, and go to state 74
-    OR       shift, and go to state 75
-    NOT      shift, and go to state 76
-    NOT_EQU  shift, and go to state 77
-    LE       shift, and go to state 78
-    GE       shift, and go to state 79
-    MOD      shift, and go to state 80
-    '<'      shift, and go to state 81
-    '='      shift, and go to state 82
-    '>'      shift, and go to state 83
-    '+'      shift, and go to state 84
-    '-'      shift, and go to state 85
-    '*'      shift, and go to state 86
-    '/'      shift, and go to state 87
+    AND      shift, and go to state 76
+    OR       shift, and go to state 77
+    NOT_EQU  shift, and go to state 78
+    LE       shift, and go to state 79
+    GE       shift, and go to state 80
+    MOD      shift, and go to state 81
+    '<'      shift, and go to state 82
+    '='      shift, and go to state 83
+    '>'      shift, and go to state 84
+    '+'      shift, and go to state 85
+    '-'      shift, and go to state 86
+    '*'      shift, and go to state 87
+    '/'      shift, and go to state 88
 
     '-'       [reduce using rule 49 (simple)]
     $default  reduce using rule 49 (simple)
 
 
-State 68
+State 69
 
    51 simple: RESULT expression .
    58 expression: expression . '+' expression
@@ -1065,7 +1086,6 @@ State 68
    62           | expression . MOD expression
    64           | expression . AND expression
    65           | expression . OR expression
-   66           | expression . NOT expression
    67           | expression . '<' expression
    68           | expression . LE expression
    69           | expression . '=' expression
@@ -1073,88 +1093,122 @@ State 68
    71           | expression . '>' expression
    72           | expression . NOT_EQU expression
 
-    AND      shift, and go to state 74
-    OR       shift, and go to state 75
-    NOT      shift, and go to state 76
-    NOT_EQU  shift, and go to state 77
-    LE       shift, and go to state 78
-    GE       shift, and go to state 79
-    MOD      shift, and go to state 80
-    '<'      shift, and go to state 81
-    '='      shift, and go to state 82
-    '>'      shift, and go to state 83
-    '+'      shift, and go to state 84
-    '-'      shift, and go to state 85
-    '*'      shift, and go to state 86
-    '/'      shift, and go to state 87
+    AND      shift, and go to state 76
+    OR       shift, and go to state 77
+    NOT_EQU  shift, and go to state 78
+    LE       shift, and go to state 79
+    GE       shift, and go to state 80
+    MOD      shift, and go to state 81
+    '<'      shift, and go to state 82
+    '='      shift, and go to state 83
+    '>'      shift, and go to state 84
+    '+'      shift, and go to state 85
+    '-'      shift, and go to state 86
+    '*'      shift, and go to state 87
+    '/'      shift, and go to state 88
 
     '-'       [reduce using rule 51 (simple)]
     $default  reduce using rule 51 (simple)
 
 
-State 69
+State 70
+
+   58 expression: expression . '+' expression
+   59           | expression . '-' expression
+   60           | expression . '*' expression
+   61           | expression . '/' expression
+   62           | expression . MOD expression
+   64           | expression . AND expression
+   65           | expression . OR expression
+   66           | NOT expression .
+   67           | expression . '<' expression
+   68           | expression . LE expression
+   69           | expression . '=' expression
+   70           | expression . GE expression
+   71           | expression . '>' expression
+   72           | expression . NOT_EQU expression
+
+    NOT_EQU  shift, and go to state 78
+    LE       shift, and go to state 79
+    GE       shift, and go to state 80
+    MOD      shift, and go to state 81
+    '<'      shift, and go to state 82
+    '='      shift, and go to state 83
+    '>'      shift, and go to state 84
+    '+'      shift, and go to state 85
+    '-'      shift, and go to state 86
+    '*'      shift, and go to state 87
+    '/'      shift, and go to state 88
+
+    $default  reduce using rule 66 (expression)
+
+
+State 71
 
    48 simple: IDENTIFIER ASSIGN . expression
 
     FALSE             shift, and go to state 24
     TRUE              shift, and go to state 33
-    IDENTIFIER        shift, and go to state 64
-    INT_NUM           shift, and go to state 35
-    REAL_NUM          shift, and go to state 36
-    STRING_CONSTANTS  shift, and go to state 37
-    '-'               shift, and go to state 38
-    '('               shift, and go to state 39
+    NOT               shift, and go to state 34
+    IDENTIFIER        shift, and go to state 65
+    INT_NUM           shift, and go to state 36
+    REAL_NUM          shift, and go to state 37
+    STRING_CONSTANTS  shift, and go to state 38
+    '-'               shift, and go to state 39
+    '('               shift, and go to state 40
 
-    constant_exp        go to state 41
-    expression          go to state 104
-    function_procedure  go to state 45
-    array_reference     go to state 46
+    constant_exp        go to state 42
+    expression          go to state 105
+    function_procedure  go to state 46
+    array_reference     go to state 47
 
 
-State 70
+State 72
 
    78 function_procedure: IDENTIFIER '(' . argument_body ')'
 
     FALSE             shift, and go to state 24
     TRUE              shift, and go to state 33
-    IDENTIFIER        shift, and go to state 64
-    INT_NUM           shift, and go to state 35
-    REAL_NUM          shift, and go to state 36
-    STRING_CONSTANTS  shift, and go to state 37
-    '-'               shift, and go to state 38
-    '('               shift, and go to state 39
+    NOT               shift, and go to state 34
+    IDENTIFIER        shift, and go to state 65
+    INT_NUM           shift, and go to state 36
+    REAL_NUM          shift, and go to state 37
+    STRING_CONSTANTS  shift, and go to state 38
+    '-'               shift, and go to state 39
+    '('               shift, and go to state 40
 
     $default  reduce using rule 81 (argument_body)
 
-    constant_exp        go to state 41
-    expression          go to state 105
-    function_procedure  go to state 45
-    array_reference     go to state 46
-    argument_body       go to state 106
-    arguments           go to state 107
-    func_expression     go to state 108
+    constant_exp        go to state 42
+    expression          go to state 106
+    function_procedure  go to state 46
+    array_reference     go to state 47
+    argument_body       go to state 107
+    arguments           go to state 108
+    func_expression     go to state 109
 
 
-State 71
+State 73
 
    79 array_reference: IDENTIFIER '[' . expression ']'
 
     FALSE             shift, and go to state 24
     TRUE              shift, and go to state 33
-    IDENTIFIER        shift, and go to state 64
-    INT_NUM           shift, and go to state 35
-    REAL_NUM          shift, and go to state 36
-    STRING_CONSTANTS  shift, and go to state 37
-    '-'               shift, and go to state 38
-    '('               shift, and go to state 39
+    NOT               shift, and go to state 34
+    IDENTIFIER        shift, and go to state 65
+    INT_NUM           shift, and go to state 36
+    REAL_NUM          shift, and go to state 37
+    STRING_CONSTANTS  shift, and go to state 38
+    '-'               shift, and go to state 39
+    '('               shift, and go to state 40
 
-    constant_exp        go to state 41
-    expression          go to state 109
-    function_procedure  go to state 45
-    array_reference     go to state 46
+    constant_exp        go to state 42
+    expression          go to state 110
+    function_procedure  go to state 46
+    array_reference     go to state 47
 
 
-State 72
+State 74
 
    58 expression: expression . '+' expression
    59           | expression . '-' expression
@@ -1164,7 +1218,6 @@ State 72
    63           | '-' expression .
    64           | expression . AND expression
    65           | expression . OR expression
-   66           | expression . NOT expression
    67           | expression . '<' expression
    68           | expression . LE expression
    69           | expression . '=' expression
@@ -1175,7 +1228,7 @@ State 72
     $default  reduce using rule 63 (expression)
 
 
-State 73
+State 75
 
    58 expression: expression . '+' expression
    59           | expression . '-' expression
@@ -1184,7 +1237,6 @@ State 73
    62           | expression . MOD expression
    64           | expression . AND expression
    65           | expression . OR expression
-   66           | expression . NOT expression
    67           | expression . '<' expression
    68           | expression . LE expression
    69           | expression . '=' expression
@@ -1193,290 +1245,283 @@ State 73
    72           | expression . NOT_EQU expression
    73           | '(' expression . ')'
 
-    AND      shift, and go to state 74
-    OR       shift, and go to state 75
-    NOT      shift, and go to state 76
-    NOT_EQU  shift, and go to state 77
-    LE       shift, and go to state 78
-    GE       shift, and go to state 79
-    MOD      shift, and go to state 80
-    '<'      shift, and go to state 81
-    '='      shift, and go to state 82
-    '>'      shift, and go to state 83
-    '+'      shift, and go to state 84
-    '-'      shift, and go to state 85
-    '*'      shift, and go to state 86
-    '/'      shift, and go to state 87
-    ')'      shift, and go to state 110
+    AND      shift, and go to state 76
+    OR       shift, and go to state 77
+    NOT_EQU  shift, and go to state 78
+    LE       shift, and go to state 79
+    GE       shift, and go to state 80
+    MOD      shift, and go to state 81
+    '<'      shift, and go to state 82
+    '='      shift, and go to state 83
+    '>'      shift, and go to state 84
+    '+'      shift, and go to state 85
+    '-'      shift, and go to state 86
+    '*'      shift, and go to state 87
+    '/'      shift, and go to state 88
+    ')'      shift, and go to state 111
 
 
-State 74
+State 76
 
    64 expression: expression AND . expression
 
     FALSE             shift, and go to state 24
     TRUE              shift, and go to state 33
-    IDENTIFIER        shift, and go to state 64
-    INT_NUM           shift, and go to state 35
-    REAL_NUM          shift, and go to state 36
-    STRING_CONSTANTS  shift, and go to state 37
-    '-'               shift, and go to state 38
-    '('               shift, and go to state 39
+    NOT               shift, and go to state 34
+    IDENTIFIER        shift, and go to state 65
+    INT_NUM           shift, and go to state 36
+    REAL_NUM          shift, and go to state 37
+    STRING_CONSTANTS  shift, and go to state 38
+    '-'               shift, and go to state 39
+    '('               shift, and go to state 40
 
-    constant_exp        go to state 41
-    expression          go to state 111
-    function_procedure  go to state 45
-    array_reference     go to state 46
+    constant_exp        go to state 42
+    expression          go to state 112
+    function_procedure  go to state 46
+    array_reference     go to state 47
 
 
-State 75
+State 77
 
    65 expression: expression OR . expression
 
     FALSE             shift, and go to state 24
     TRUE              shift, and go to state 33
-    IDENTIFIER        shift, and go to state 64
-    INT_NUM           shift, and go to state 35
-    REAL_NUM          shift, and go to state 36
-    STRING_CONSTANTS  shift, and go to state 37
-    '-'               shift, and go to state 38
-    '('               shift, and go to state 39
+    NOT               shift, and go to state 34
+    IDENTIFIER        shift, and go to state 65
+    INT_NUM           shift, and go to state 36
+    REAL_NUM          shift, and go to state 37
+    STRING_CONSTANTS  shift, and go to state 38
+    '-'               shift, and go to state 39
+    '('               shift, and go to state 40
 
-    constant_exp        go to state 41
-    expression          go to state 112
-    function_procedure  go to state 45
-    array_reference     go to state 46
-
-
-State 76
-
-   66 expression: expression NOT . expression
-
-    FALSE             shift, and go to state 24
-    TRUE              shift, and go to state 33
-    IDENTIFIER        shift, and go to state 64
-    INT_NUM           shift, and go to state 35
-    REAL_NUM          shift, and go to state 36
-    STRING_CONSTANTS  shift, and go to state 37
-    '-'               shift, and go to state 38
-    '('               shift, and go to state 39
-
-    constant_exp        go to state 41
+    constant_exp        go to state 42
     expression          go to state 113
-    function_procedure  go to state 45
-    array_reference     go to state 46
+    function_procedure  go to state 46
+    array_reference     go to state 47
 
 
-State 77
+State 78
 
    72 expression: expression NOT_EQU . expression
 
     FALSE             shift, and go to state 24
     TRUE              shift, and go to state 33
-    IDENTIFIER        shift, and go to state 64
-    INT_NUM           shift, and go to state 35
-    REAL_NUM          shift, and go to state 36
-    STRING_CONSTANTS  shift, and go to state 37
-    '-'               shift, and go to state 38
-    '('               shift, and go to state 39
+    NOT               shift, and go to state 34
+    IDENTIFIER        shift, and go to state 65
+    INT_NUM           shift, and go to state 36
+    REAL_NUM          shift, and go to state 37
+    STRING_CONSTANTS  shift, and go to state 38
+    '-'               shift, and go to state 39
+    '('               shift, and go to state 40
 
-    constant_exp        go to state 41
+    constant_exp        go to state 42
     expression          go to state 114
-    function_procedure  go to state 45
-    array_reference     go to state 46
+    function_procedure  go to state 46
+    array_reference     go to state 47
 
 
-State 78
+State 79
 
    68 expression: expression LE . expression
 
     FALSE             shift, and go to state 24
     TRUE              shift, and go to state 33
-    IDENTIFIER        shift, and go to state 64
-    INT_NUM           shift, and go to state 35
-    REAL_NUM          shift, and go to state 36
-    STRING_CONSTANTS  shift, and go to state 37
-    '-'               shift, and go to state 38
-    '('               shift, and go to state 39
+    NOT               shift, and go to state 34
+    IDENTIFIER        shift, and go to state 65
+    INT_NUM           shift, and go to state 36
+    REAL_NUM          shift, and go to state 37
+    STRING_CONSTANTS  shift, and go to state 38
+    '-'               shift, and go to state 39
+    '('               shift, and go to state 40
 
-    constant_exp        go to state 41
+    constant_exp        go to state 42
     expression          go to state 115
-    function_procedure  go to state 45
-    array_reference     go to state 46
+    function_procedure  go to state 46
+    array_reference     go to state 47
 
 
-State 79
+State 80
 
    70 expression: expression GE . expression
 
     FALSE             shift, and go to state 24
     TRUE              shift, and go to state 33
-    IDENTIFIER        shift, and go to state 64
-    INT_NUM           shift, and go to state 35
-    REAL_NUM          shift, and go to state 36
-    STRING_CONSTANTS  shift, and go to state 37
-    '-'               shift, and go to state 38
-    '('               shift, and go to state 39
+    NOT               shift, and go to state 34
+    IDENTIFIER        shift, and go to state 65
+    INT_NUM           shift, and go to state 36
+    REAL_NUM          shift, and go to state 37
+    STRING_CONSTANTS  shift, and go to state 38
+    '-'               shift, and go to state 39
+    '('               shift, and go to state 40
 
-    constant_exp        go to state 41
+    constant_exp        go to state 42
     expression          go to state 116
-    function_procedure  go to state 45
-    array_reference     go to state 46
+    function_procedure  go to state 46
+    array_reference     go to state 47
 
 
-State 80
+State 81
 
    62 expression: expression MOD . expression
 
     FALSE             shift, and go to state 24
     TRUE              shift, and go to state 33
-    IDENTIFIER        shift, and go to state 64
-    INT_NUM           shift, and go to state 35
-    REAL_NUM          shift, and go to state 36
-    STRING_CONSTANTS  shift, and go to state 37
-    '-'               shift, and go to state 38
-    '('               shift, and go to state 39
+    NOT               shift, and go to state 34
+    IDENTIFIER        shift, and go to state 65
+    INT_NUM           shift, and go to state 36
+    REAL_NUM          shift, and go to state 37
+    STRING_CONSTANTS  shift, and go to state 38
+    '-'               shift, and go to state 39
+    '('               shift, and go to state 40
 
-    constant_exp        go to state 41
+    constant_exp        go to state 42
     expression          go to state 117
-    function_procedure  go to state 45
-    array_reference     go to state 46
+    function_procedure  go to state 46
+    array_reference     go to state 47
 
 
-State 81
+State 82
 
    67 expression: expression '<' . expression
 
     FALSE             shift, and go to state 24
     TRUE              shift, and go to state 33
-    IDENTIFIER        shift, and go to state 64
-    INT_NUM           shift, and go to state 35
-    REAL_NUM          shift, and go to state 36
-    STRING_CONSTANTS  shift, and go to state 37
-    '-'               shift, and go to state 38
-    '('               shift, and go to state 39
+    NOT               shift, and go to state 34
+    IDENTIFIER        shift, and go to state 65
+    INT_NUM           shift, and go to state 36
+    REAL_NUM          shift, and go to state 37
+    STRING_CONSTANTS  shift, and go to state 38
+    '-'               shift, and go to state 39
+    '('               shift, and go to state 40
 
-    constant_exp        go to state 41
+    constant_exp        go to state 42
     expression          go to state 118
-    function_procedure  go to state 45
-    array_reference     go to state 46
+    function_procedure  go to state 46
+    array_reference     go to state 47
 
 
-State 82
+State 83
 
    69 expression: expression '=' . expression
 
     FALSE             shift, and go to state 24
     TRUE              shift, and go to state 33
-    IDENTIFIER        shift, and go to state 64
-    INT_NUM           shift, and go to state 35
-    REAL_NUM          shift, and go to state 36
-    STRING_CONSTANTS  shift, and go to state 37
-    '-'               shift, and go to state 38
-    '('               shift, and go to state 39
+    NOT               shift, and go to state 34
+    IDENTIFIER        shift, and go to state 65
+    INT_NUM           shift, and go to state 36
+    REAL_NUM          shift, and go to state 37
+    STRING_CONSTANTS  shift, and go to state 38
+    '-'               shift, and go to state 39
+    '('               shift, and go to state 40
 
-    constant_exp        go to state 41
+    constant_exp        go to state 42
     expression          go to state 119
-    function_procedure  go to state 45
-    array_reference     go to state 46
+    function_procedure  go to state 46
+    array_reference     go to state 47
 
 
-State 83
+State 84
 
    71 expression: expression '>' . expression
 
     FALSE             shift, and go to state 24
     TRUE              shift, and go to state 33
-    IDENTIFIER        shift, and go to state 64
-    INT_NUM           shift, and go to state 35
-    REAL_NUM          shift, and go to state 36
-    STRING_CONSTANTS  shift, and go to state 37
-    '-'               shift, and go to state 38
-    '('               shift, and go to state 39
+    NOT               shift, and go to state 34
+    IDENTIFIER        shift, and go to state 65
+    INT_NUM           shift, and go to state 36
+    REAL_NUM          shift, and go to state 37
+    STRING_CONSTANTS  shift, and go to state 38
+    '-'               shift, and go to state 39
+    '('               shift, and go to state 40
 
-    constant_exp        go to state 41
+    constant_exp        go to state 42
     expression          go to state 120
-    function_procedure  go to state 45
-    array_reference     go to state 46
+    function_procedure  go to state 46
+    array_reference     go to state 47
 
 
-State 84
+State 85
 
    58 expression: expression '+' . expression
 
     FALSE             shift, and go to state 24
     TRUE              shift, and go to state 33
-    IDENTIFIER        shift, and go to state 64
-    INT_NUM           shift, and go to state 35
-    REAL_NUM          shift, and go to state 36
-    STRING_CONSTANTS  shift, and go to state 37
-    '-'               shift, and go to state 38
-    '('               shift, and go to state 39
+    NOT               shift, and go to state 34
+    IDENTIFIER        shift, and go to state 65
+    INT_NUM           shift, and go to state 36
+    REAL_NUM          shift, and go to state 37
+    STRING_CONSTANTS  shift, and go to state 38
+    '-'               shift, and go to state 39
+    '('               shift, and go to state 40
 
-    constant_exp        go to state 41
+    constant_exp        go to state 42
     expression          go to state 121
-    function_procedure  go to state 45
-    array_reference     go to state 46
+    function_procedure  go to state 46
+    array_reference     go to state 47
 
 
-State 85
+State 86
 
    59 expression: expression '-' . expression
 
     FALSE             shift, and go to state 24
     TRUE              shift, and go to state 33
-    IDENTIFIER        shift, and go to state 64
-    INT_NUM           shift, and go to state 35
-    REAL_NUM          shift, and go to state 36
-    STRING_CONSTANTS  shift, and go to state 37
-    '-'               shift, and go to state 38
-    '('               shift, and go to state 39
+    NOT               shift, and go to state 34
+    IDENTIFIER        shift, and go to state 65
+    INT_NUM           shift, and go to state 36
+    REAL_NUM          shift, and go to state 37
+    STRING_CONSTANTS  shift, and go to state 38
+    '-'               shift, and go to state 39
+    '('               shift, and go to state 40
 
-    constant_exp        go to state 41
+    constant_exp        go to state 42
     expression          go to state 122
-    function_procedure  go to state 45
-    array_reference     go to state 46
+    function_procedure  go to state 46
+    array_reference     go to state 47
 
 
-State 86
+State 87
 
    60 expression: expression '*' . expression
 
     FALSE             shift, and go to state 24
     TRUE              shift, and go to state 33
-    IDENTIFIER        shift, and go to state 64
-    INT_NUM           shift, and go to state 35
-    REAL_NUM          shift, and go to state 36
-    STRING_CONSTANTS  shift, and go to state 37
-    '-'               shift, and go to state 38
-    '('               shift, and go to state 39
+    NOT               shift, and go to state 34
+    IDENTIFIER        shift, and go to state 65
+    INT_NUM           shift, and go to state 36
+    REAL_NUM          shift, and go to state 37
+    STRING_CONSTANTS  shift, and go to state 38
+    '-'               shift, and go to state 39
+    '('               shift, and go to state 40
 
-    constant_exp        go to state 41
+    constant_exp        go to state 42
     expression          go to state 123
-    function_procedure  go to state 45
-    array_reference     go to state 46
+    function_procedure  go to state 46
+    array_reference     go to state 47
 
 
-State 87
+State 88
 
    61 expression: expression '/' . expression
 
     FALSE             shift, and go to state 24
     TRUE              shift, and go to state 33
-    IDENTIFIER        shift, and go to state 64
-    INT_NUM           shift, and go to state 35
-    REAL_NUM          shift, and go to state 36
-    STRING_CONSTANTS  shift, and go to state 37
-    '-'               shift, and go to state 38
-    '('               shift, and go to state 39
+    NOT               shift, and go to state 34
+    IDENTIFIER        shift, and go to state 65
+    INT_NUM           shift, and go to state 36
+    REAL_NUM          shift, and go to state 37
+    STRING_CONSTANTS  shift, and go to state 38
+    '-'               shift, and go to state 39
+    '('               shift, and go to state 40
 
-    constant_exp        go to state 41
+    constant_exp        go to state 42
     expression          go to state 124
-    function_procedure  go to state 45
-    array_reference     go to state 46
+    function_procedure  go to state 46
+    array_reference     go to state 47
 
 
-State 88
+State 89
 
    86 condition: if_head THEN . function_bodys ELSE function_bodys END IF
    87          | if_head THEN . function_bodys END IF
@@ -1486,7 +1531,7 @@ State 88
     function_bodys  go to state 125
 
 
-State 89
+State 90
 
    30 array: ARRAY IDENTIFIER ':' ARRAY . number '.' '.' number OF type
 
@@ -1496,55 +1541,55 @@ State 89
     number  go to state 128
 
 
-State 90
+State 91
 
    17 constants: CONST IDENTIFIER ASSIGN constant_exp .
 
     $default  reduce using rule 17 (constants)
 
 
-State 91
+State 92
 
    20 type: ':' BOOL .
 
     $default  reduce using rule 20 (type)
 
 
-State 92
+State 93
 
    18 type: ':' INT .
 
     $default  reduce using rule 18 (type)
 
 
-State 93
+State 94
 
    19 type: ':' REAL .
 
     $default  reduce using rule 19 (type)
 
 
-State 94
+State 95
 
    21 type: ':' STRING .
 
     $default  reduce using rule 21 (type)
 
 
-State 95
+State 96
 
    16 constants: CONST IDENTIFIER type ASSIGN . constant_exp
 
     FALSE             shift, and go to state 24
     TRUE              shift, and go to state 33
-    INT_NUM           shift, and go to state 35
-    REAL_NUM          shift, and go to state 36
-    STRING_CONSTANTS  shift, and go to state 37
+    INT_NUM           shift, and go to state 36
+    REAL_NUM          shift, and go to state 37
+    STRING_CONSTANTS  shift, and go to state 38
 
     constant_exp  go to state 129
 
 
-State 96
+State 97
 
    34 function: FUNCTION IDENTIFIER $@1 '(' . parameters_block ')' type function_bodys END IDENTIFIER
 
@@ -1557,7 +1602,7 @@ State 96
     parameter         go to state 133
 
 
-State 97
+State 98
 
    36 procedure: PROCEDURE IDENTIFIER $@2 '(' . parameters_block ')' function_bodys END IDENTIFIER
 
@@ -1570,27 +1615,27 @@ State 97
     parameter         go to state 133
 
 
-State 98
+State 99
 
    29 variable: VAR IDENTIFIER ASSIGN constant_exp .
 
     $default  reduce using rule 29 (variable)
 
 
-State 99
+State 100
 
    27 variable: VAR IDENTIFIER type ASSIGN . constant_exp
 
     FALSE             shift, and go to state 24
     TRUE              shift, and go to state 33
-    INT_NUM           shift, and go to state 35
-    REAL_NUM          shift, and go to state 36
-    STRING_CONSTANTS  shift, and go to state 37
+    INT_NUM           shift, and go to state 36
+    REAL_NUM          shift, and go to state 37
+    STRING_CONSTANTS  shift, and go to state 38
 
     constant_exp  go to state 135
 
 
-State 100
+State 101
 
    37 function_bodys: function_bodys . function_body
    47 block: BEGIN_ $@3 function_bodys . END
@@ -1611,31 +1656,32 @@ State 100
     SKIP              shift, and go to state 32
     TRUE              shift, and go to state 33
     VAR               shift, and go to state 8
-    IDENTIFIER        shift, and go to state 34
-    INT_NUM           shift, and go to state 35
-    REAL_NUM          shift, and go to state 36
-    STRING_CONSTANTS  shift, and go to state 37
-    '-'               shift, and go to state 38
-    '('               shift, and go to state 39
+    NOT               shift, and go to state 34
+    IDENTIFIER        shift, and go to state 35
+    INT_NUM           shift, and go to state 36
+    REAL_NUM          shift, and go to state 37
+    STRING_CONSTANTS  shift, and go to state 38
+    '-'               shift, and go to state 39
+    '('               shift, and go to state 40
 
     statement           go to state 137
     declaration         go to state 138
     constants           go to state 12
-    constant_exp        go to state 41
+    constant_exp        go to state 42
     variable            go to state 13
     array               go to state 14
     function_body       go to state 139
-    block               go to state 42
-    simple              go to state 43
-    expression          go to state 44
-    function_procedure  go to state 45
-    array_reference     go to state 46
-    if_head             go to state 47
-    condition           go to state 48
-    loop                go to state 49
+    block               go to state 43
+    simple              go to state 44
+    expression          go to state 45
+    function_procedure  go to state 46
+    array_reference     go to state 47
+    if_head             go to state 48
+    condition           go to state 49
+    loop                go to state 50
 
 
-State 101
+State 102
 
    56 when: WHEN expression .
    58 expression: expression . '+' expression
@@ -1645,7 +1691,6 @@ State 101
    62           | expression . MOD expression
    64           | expression . AND expression
    65           | expression . OR expression
-   66           | expression . NOT expression
    67           | expression . '<' expression
    68           | expression . LE expression
    69           | expression . '=' expression
@@ -1653,33 +1698,32 @@ State 101
    71           | expression . '>' expression
    72           | expression . NOT_EQU expression
 
-    AND      shift, and go to state 74
-    OR       shift, and go to state 75
-    NOT      shift, and go to state 76
-    NOT_EQU  shift, and go to state 77
-    LE       shift, and go to state 78
-    GE       shift, and go to state 79
-    MOD      shift, and go to state 80
-    '<'      shift, and go to state 81
-    '='      shift, and go to state 82
-    '>'      shift, and go to state 83
-    '+'      shift, and go to state 84
-    '-'      shift, and go to state 85
-    '*'      shift, and go to state 86
-    '/'      shift, and go to state 87
+    AND      shift, and go to state 76
+    OR       shift, and go to state 77
+    NOT_EQU  shift, and go to state 78
+    LE       shift, and go to state 79
+    GE       shift, and go to state 80
+    MOD      shift, and go to state 81
+    '<'      shift, and go to state 82
+    '='      shift, and go to state 83
+    '>'      shift, and go to state 84
+    '+'      shift, and go to state 85
+    '-'      shift, and go to state 86
+    '*'      shift, and go to state 87
+    '/'      shift, and go to state 88
 
     '-'       [reduce using rule 56 (when)]
     $default  reduce using rule 56 (when)
 
 
-State 102
+State 103
 
    93 loop: FOR decreasing $@5 . IDENTIFIER $@6 ':' number '.' '.' number $@7 function_bodys END FOR
 
     IDENTIFIER  shift, and go to state 140
 
 
-State 103
+State 104
 
    37 function_bodys: function_bodys . function_body
    89 loop: LOOP $@4 function_bodys . END LOOP
@@ -1700,31 +1744,32 @@ State 103
     SKIP              shift, and go to state 32
     TRUE              shift, and go to state 33
     VAR               shift, and go to state 8
-    IDENTIFIER        shift, and go to state 34
-    INT_NUM           shift, and go to state 35
-    REAL_NUM          shift, and go to state 36
-    STRING_CONSTANTS  shift, and go to state 37
-    '-'               shift, and go to state 38
-    '('               shift, and go to state 39
+    NOT               shift, and go to state 34
+    IDENTIFIER        shift, and go to state 35
+    INT_NUM           shift, and go to state 36
+    REAL_NUM          shift, and go to state 37
+    STRING_CONSTANTS  shift, and go to state 38
+    '-'               shift, and go to state 39
+    '('               shift, and go to state 40
 
     statement           go to state 137
     declaration         go to state 138
     constants           go to state 12
-    constant_exp        go to state 41
+    constant_exp        go to state 42
     variable            go to state 13
     array               go to state 14
     function_body       go to state 139
-    block               go to state 42
-    simple              go to state 43
-    expression          go to state 44
-    function_procedure  go to state 45
-    array_reference     go to state 46
-    if_head             go to state 47
-    condition           go to state 48
-    loop                go to state 49
+    block               go to state 43
+    simple              go to state 44
+    expression          go to state 45
+    function_procedure  go to state 46
+    array_reference     go to state 47
+    if_head             go to state 48
+    condition           go to state 49
+    loop                go to state 50
 
 
-State 104
+State 105
 
    48 simple: IDENTIFIER ASSIGN expression .
    58 expression: expression . '+' expression
@@ -1734,7 +1779,6 @@ State 104
    62           | expression . MOD expression
    64           | expression . AND expression
    65           | expression . OR expression
-   66           | expression . NOT expression
    67           | expression . '<' expression
    68           | expression . LE expression
    69           | expression . '=' expression
@@ -1742,24 +1786,23 @@ State 104
    71           | expression . '>' expression
    72           | expression . NOT_EQU expression
 
-    AND      shift, and go to state 74
-    OR       shift, and go to state 75
-    NOT      shift, and go to state 76
-    NOT_EQU  shift, and go to state 77
-    LE       shift, and go to state 78
-    GE       shift, and go to state 79
-    MOD      shift, and go to state 80
-    '<'      shift, and go to state 81
-    '='      shift, and go to state 82
-    '>'      shift, and go to state 83
-    '+'      shift, and go to state 84
-    '*'      shift, and go to state 86
-    '/'      shift, and go to state 87
+    AND      shift, and go to state 76
+    OR       shift, and go to state 77
+    NOT_EQU  shift, and go to state 78
+    LE       shift, and go to state 79
+    GE       shift, and go to state 80
+    MOD      shift, and go to state 81
+    '<'      shift, and go to state 82
+    '='      shift, and go to state 83
+    '>'      shift, and go to state 84
+    '+'      shift, and go to state 85
+    '*'      shift, and go to state 87
+    '/'      shift, and go to state 88
 
     $default  reduce using rule 48 (simple)
 
 
-State 105
+State 106
 
    58 expression: expression . '+' expression
    59           | expression . '-' expression
@@ -1768,7 +1811,6 @@ State 105
    62           | expression . MOD expression
    64           | expression . AND expression
    65           | expression . OR expression
-   66           | expression . NOT expression
    67           | expression . '<' expression
    68           | expression . LE expression
    69           | expression . '=' expression
@@ -1777,32 +1819,31 @@ State 105
    72           | expression . NOT_EQU expression
    84 func_expression: expression .
 
-    AND      shift, and go to state 74
-    OR       shift, and go to state 75
-    NOT      shift, and go to state 76
-    NOT_EQU  shift, and go to state 77
-    LE       shift, and go to state 78
-    GE       shift, and go to state 79
-    MOD      shift, and go to state 80
-    '<'      shift, and go to state 81
-    '='      shift, and go to state 82
-    '>'      shift, and go to state 83
-    '+'      shift, and go to state 84
-    '-'      shift, and go to state 85
-    '*'      shift, and go to state 86
-    '/'      shift, and go to state 87
+    AND      shift, and go to state 76
+    OR       shift, and go to state 77
+    NOT_EQU  shift, and go to state 78
+    LE       shift, and go to state 79
+    GE       shift, and go to state 80
+    MOD      shift, and go to state 81
+    '<'      shift, and go to state 82
+    '='      shift, and go to state 83
+    '>'      shift, and go to state 84
+    '+'      shift, and go to state 85
+    '-'      shift, and go to state 86
+    '*'      shift, and go to state 87
+    '/'      shift, and go to state 88
 
     $default  reduce using rule 84 (func_expression)
 
 
-State 106
+State 107
 
    78 function_procedure: IDENTIFIER '(' argument_body . ')'
 
     ')'  shift, and go to state 142
 
 
-State 107
+State 108
 
    80 argument_body: arguments .
    82 arguments: arguments . ',' func_expression
@@ -1812,14 +1853,14 @@ State 107
     $default  reduce using rule 80 (argument_body)
 
 
-State 108
+State 109
 
    83 arguments: func_expression .
 
     $default  reduce using rule 83 (arguments)
 
 
-State 109
+State 110
 
    58 expression: expression . '+' expression
    59           | expression . '-' expression
@@ -1828,7 +1869,6 @@ State 109
    62           | expression . MOD expression
    64           | expression . AND expression
    65           | expression . OR expression
-   66           | expression . NOT expression
    67           | expression . '<' expression
    68           | expression . LE expression
    69           | expression . '=' expression
@@ -1837,62 +1877,27 @@ State 109
    72           | expression . NOT_EQU expression
    79 array_reference: IDENTIFIER '[' expression . ']'
 
-    AND      shift, and go to state 74
-    OR       shift, and go to state 75
-    NOT      shift, and go to state 76
-    NOT_EQU  shift, and go to state 77
-    LE       shift, and go to state 78
-    GE       shift, and go to state 79
-    MOD      shift, and go to state 80
-    '<'      shift, and go to state 81
-    '='      shift, and go to state 82
-    '>'      shift, and go to state 83
-    '+'      shift, and go to state 84
-    '-'      shift, and go to state 85
-    '*'      shift, and go to state 86
-    '/'      shift, and go to state 87
+    AND      shift, and go to state 76
+    OR       shift, and go to state 77
+    NOT_EQU  shift, and go to state 78
+    LE       shift, and go to state 79
+    GE       shift, and go to state 80
+    MOD      shift, and go to state 81
+    '<'      shift, and go to state 82
+    '='      shift, and go to state 83
+    '>'      shift, and go to state 84
+    '+'      shift, and go to state 85
+    '-'      shift, and go to state 86
+    '*'      shift, and go to state 87
+    '/'      shift, and go to state 88
     ']'      shift, and go to state 144
-
-
-State 110
-
-   73 expression: '(' expression ')' .
-
-    $default  reduce using rule 73 (expression)
 
 
 State 111
 
-   58 expression: expression . '+' expression
-   59           | expression . '-' expression
-   60           | expression . '*' expression
-   61           | expression . '/' expression
-   62           | expression . MOD expression
-   64           | expression . AND expression
-   64           | expression AND expression .
-   65           | expression . OR expression
-   66           | expression . NOT expression
-   67           | expression . '<' expression
-   68           | expression . LE expression
-   69           | expression . '=' expression
-   70           | expression . GE expression
-   71           | expression . '>' expression
-   72           | expression . NOT_EQU expression
+   73 expression: '(' expression ')' .
 
-    NOT      shift, and go to state 76
-    NOT_EQU  shift, and go to state 77
-    LE       shift, and go to state 78
-    GE       shift, and go to state 79
-    MOD      shift, and go to state 80
-    '<'      shift, and go to state 81
-    '='      shift, and go to state 82
-    '>'      shift, and go to state 83
-    '+'      shift, and go to state 84
-    '-'      shift, and go to state 85
-    '*'      shift, and go to state 86
-    '/'      shift, and go to state 87
-
-    $default  reduce using rule 64 (expression)
+    $default  reduce using rule 73 (expression)
 
 
 State 112
@@ -1903,9 +1908,8 @@ State 112
    61           | expression . '/' expression
    62           | expression . MOD expression
    64           | expression . AND expression
+   64           | expression AND expression .
    65           | expression . OR expression
-   65           | expression OR expression .
-   66           | expression . NOT expression
    67           | expression . '<' expression
    68           | expression . LE expression
    69           | expression . '=' expression
@@ -1913,21 +1917,19 @@ State 112
    71           | expression . '>' expression
    72           | expression . NOT_EQU expression
 
-    AND      shift, and go to state 74
-    NOT      shift, and go to state 76
-    NOT_EQU  shift, and go to state 77
-    LE       shift, and go to state 78
-    GE       shift, and go to state 79
-    MOD      shift, and go to state 80
-    '<'      shift, and go to state 81
-    '='      shift, and go to state 82
-    '>'      shift, and go to state 83
-    '+'      shift, and go to state 84
-    '-'      shift, and go to state 85
-    '*'      shift, and go to state 86
-    '/'      shift, and go to state 87
+    NOT_EQU  shift, and go to state 78
+    LE       shift, and go to state 79
+    GE       shift, and go to state 80
+    MOD      shift, and go to state 81
+    '<'      shift, and go to state 82
+    '='      shift, and go to state 83
+    '>'      shift, and go to state 84
+    '+'      shift, and go to state 85
+    '-'      shift, and go to state 86
+    '*'      shift, and go to state 87
+    '/'      shift, and go to state 88
 
-    $default  reduce using rule 65 (expression)
+    $default  reduce using rule 64 (expression)
 
 
 State 113
@@ -1939,8 +1941,7 @@ State 113
    62           | expression . MOD expression
    64           | expression . AND expression
    65           | expression . OR expression
-   66           | expression . NOT expression
-   66           | expression NOT expression .
+   65           | expression OR expression .
    67           | expression . '<' expression
    68           | expression . LE expression
    69           | expression . '=' expression
@@ -1948,19 +1949,20 @@ State 113
    71           | expression . '>' expression
    72           | expression . NOT_EQU expression
 
-    NOT_EQU  shift, and go to state 77
-    LE       shift, and go to state 78
-    GE       shift, and go to state 79
-    MOD      shift, and go to state 80
-    '<'      shift, and go to state 81
-    '='      shift, and go to state 82
-    '>'      shift, and go to state 83
-    '+'      shift, and go to state 84
-    '-'      shift, and go to state 85
-    '*'      shift, and go to state 86
-    '/'      shift, and go to state 87
+    AND      shift, and go to state 76
+    NOT_EQU  shift, and go to state 78
+    LE       shift, and go to state 79
+    GE       shift, and go to state 80
+    MOD      shift, and go to state 81
+    '<'      shift, and go to state 82
+    '='      shift, and go to state 83
+    '>'      shift, and go to state 84
+    '+'      shift, and go to state 85
+    '-'      shift, and go to state 86
+    '*'      shift, and go to state 87
+    '/'      shift, and go to state 88
 
-    $default  reduce using rule 66 (expression)
+    $default  reduce using rule 65 (expression)
 
 
 State 114
@@ -1972,7 +1974,6 @@ State 114
    62           | expression . MOD expression
    64           | expression . AND expression
    65           | expression . OR expression
-   66           | expression . NOT expression
    67           | expression . '<' expression
    68           | expression . LE expression
    69           | expression . '=' expression
@@ -1981,11 +1982,11 @@ State 114
    72           | expression . NOT_EQU expression
    72           | expression NOT_EQU expression .
 
-    MOD  shift, and go to state 80
-    '+'  shift, and go to state 84
-    '-'  shift, and go to state 85
-    '*'  shift, and go to state 86
-    '/'  shift, and go to state 87
+    MOD  shift, and go to state 81
+    '+'  shift, and go to state 85
+    '-'  shift, and go to state 86
+    '*'  shift, and go to state 87
+    '/'  shift, and go to state 88
 
     $default  reduce using rule 72 (expression)
 
@@ -1999,7 +2000,6 @@ State 115
    62           | expression . MOD expression
    64           | expression . AND expression
    65           | expression . OR expression
-   66           | expression . NOT expression
    67           | expression . '<' expression
    68           | expression . LE expression
    68           | expression LE expression .
@@ -2008,11 +2008,11 @@ State 115
    71           | expression . '>' expression
    72           | expression . NOT_EQU expression
 
-    MOD  shift, and go to state 80
-    '+'  shift, and go to state 84
-    '-'  shift, and go to state 85
-    '*'  shift, and go to state 86
-    '/'  shift, and go to state 87
+    MOD  shift, and go to state 81
+    '+'  shift, and go to state 85
+    '-'  shift, and go to state 86
+    '*'  shift, and go to state 87
+    '/'  shift, and go to state 88
 
     $default  reduce using rule 68 (expression)
 
@@ -2026,7 +2026,6 @@ State 116
    62           | expression . MOD expression
    64           | expression . AND expression
    65           | expression . OR expression
-   66           | expression . NOT expression
    67           | expression . '<' expression
    68           | expression . LE expression
    69           | expression . '=' expression
@@ -2035,11 +2034,11 @@ State 116
    71           | expression . '>' expression
    72           | expression . NOT_EQU expression
 
-    MOD  shift, and go to state 80
-    '+'  shift, and go to state 84
-    '-'  shift, and go to state 85
-    '*'  shift, and go to state 86
-    '/'  shift, and go to state 87
+    MOD  shift, and go to state 81
+    '+'  shift, and go to state 85
+    '-'  shift, and go to state 86
+    '*'  shift, and go to state 87
+    '/'  shift, and go to state 88
 
     $default  reduce using rule 70 (expression)
 
@@ -2054,7 +2053,6 @@ State 117
    62           | expression MOD expression .
    64           | expression . AND expression
    65           | expression . OR expression
-   66           | expression . NOT expression
    67           | expression . '<' expression
    68           | expression . LE expression
    69           | expression . '=' expression
@@ -2074,7 +2072,6 @@ State 118
    62           | expression . MOD expression
    64           | expression . AND expression
    65           | expression . OR expression
-   66           | expression . NOT expression
    67           | expression . '<' expression
    67           | expression '<' expression .
    68           | expression . LE expression
@@ -2083,11 +2080,11 @@ State 118
    71           | expression . '>' expression
    72           | expression . NOT_EQU expression
 
-    MOD  shift, and go to state 80
-    '+'  shift, and go to state 84
-    '-'  shift, and go to state 85
-    '*'  shift, and go to state 86
-    '/'  shift, and go to state 87
+    MOD  shift, and go to state 81
+    '+'  shift, and go to state 85
+    '-'  shift, and go to state 86
+    '*'  shift, and go to state 87
+    '/'  shift, and go to state 88
 
     $default  reduce using rule 67 (expression)
 
@@ -2101,7 +2098,6 @@ State 119
    62           | expression . MOD expression
    64           | expression . AND expression
    65           | expression . OR expression
-   66           | expression . NOT expression
    67           | expression . '<' expression
    68           | expression . LE expression
    69           | expression . '=' expression
@@ -2110,11 +2106,11 @@ State 119
    71           | expression . '>' expression
    72           | expression . NOT_EQU expression
 
-    MOD  shift, and go to state 80
-    '+'  shift, and go to state 84
-    '-'  shift, and go to state 85
-    '*'  shift, and go to state 86
-    '/'  shift, and go to state 87
+    MOD  shift, and go to state 81
+    '+'  shift, and go to state 85
+    '-'  shift, and go to state 86
+    '*'  shift, and go to state 87
+    '/'  shift, and go to state 88
 
     $default  reduce using rule 69 (expression)
 
@@ -2128,7 +2124,6 @@ State 120
    62           | expression . MOD expression
    64           | expression . AND expression
    65           | expression . OR expression
-   66           | expression . NOT expression
    67           | expression . '<' expression
    68           | expression . LE expression
    69           | expression . '=' expression
@@ -2137,11 +2132,11 @@ State 120
    71           | expression '>' expression .
    72           | expression . NOT_EQU expression
 
-    MOD  shift, and go to state 80
-    '+'  shift, and go to state 84
-    '-'  shift, and go to state 85
-    '*'  shift, and go to state 86
-    '/'  shift, and go to state 87
+    MOD  shift, and go to state 81
+    '+'  shift, and go to state 85
+    '-'  shift, and go to state 86
+    '*'  shift, and go to state 87
+    '/'  shift, and go to state 88
 
     $default  reduce using rule 71 (expression)
 
@@ -2156,7 +2151,6 @@ State 121
    62           | expression . MOD expression
    64           | expression . AND expression
    65           | expression . OR expression
-   66           | expression . NOT expression
    67           | expression . '<' expression
    68           | expression . LE expression
    69           | expression . '=' expression
@@ -2164,9 +2158,9 @@ State 121
    71           | expression . '>' expression
    72           | expression . NOT_EQU expression
 
-    MOD  shift, and go to state 80
-    '*'  shift, and go to state 86
-    '/'  shift, and go to state 87
+    MOD  shift, and go to state 81
+    '*'  shift, and go to state 87
+    '/'  shift, and go to state 88
 
     $default  reduce using rule 58 (expression)
 
@@ -2181,7 +2175,6 @@ State 122
    62           | expression . MOD expression
    64           | expression . AND expression
    65           | expression . OR expression
-   66           | expression . NOT expression
    67           | expression . '<' expression
    68           | expression . LE expression
    69           | expression . '=' expression
@@ -2189,9 +2182,9 @@ State 122
    71           | expression . '>' expression
    72           | expression . NOT_EQU expression
 
-    MOD  shift, and go to state 80
-    '*'  shift, and go to state 86
-    '/'  shift, and go to state 87
+    MOD  shift, and go to state 81
+    '*'  shift, and go to state 87
+    '/'  shift, and go to state 88
 
     $default  reduce using rule 59 (expression)
 
@@ -2206,7 +2199,6 @@ State 123
    62           | expression . MOD expression
    64           | expression . AND expression
    65           | expression . OR expression
-   66           | expression . NOT expression
    67           | expression . '<' expression
    68           | expression . LE expression
    69           | expression . '=' expression
@@ -2227,7 +2219,6 @@ State 124
    62           | expression . MOD expression
    64           | expression . AND expression
    65           | expression . OR expression
-   66           | expression . NOT expression
    67           | expression . '<' expression
    68           | expression . LE expression
    69           | expression . '=' expression
@@ -2261,28 +2252,29 @@ State 125
     SKIP              shift, and go to state 32
     TRUE              shift, and go to state 33
     VAR               shift, and go to state 8
-    IDENTIFIER        shift, and go to state 34
-    INT_NUM           shift, and go to state 35
-    REAL_NUM          shift, and go to state 36
-    STRING_CONSTANTS  shift, and go to state 37
-    '-'               shift, and go to state 38
-    '('               shift, and go to state 39
+    NOT               shift, and go to state 34
+    IDENTIFIER        shift, and go to state 35
+    INT_NUM           shift, and go to state 36
+    REAL_NUM          shift, and go to state 37
+    STRING_CONSTANTS  shift, and go to state 38
+    '-'               shift, and go to state 39
+    '('               shift, and go to state 40
 
     statement           go to state 137
     declaration         go to state 138
     constants           go to state 12
-    constant_exp        go to state 41
+    constant_exp        go to state 42
     variable            go to state 13
     array               go to state 14
     function_body       go to state 139
-    block               go to state 42
-    simple              go to state 43
-    expression          go to state 44
-    function_procedure  go to state 45
-    array_reference     go to state 46
-    if_head             go to state 47
-    condition           go to state 48
-    loop                go to state 49
+    block               go to state 43
+    simple              go to state 44
+    expression          go to state 45
+    function_procedure  go to state 46
+    array_reference     go to state 47
+    if_head             go to state 48
+    condition           go to state 49
+    loop                go to state 50
 
 
 State 126
@@ -2317,7 +2309,7 @@ State 130
 
    45 parameter: IDENTIFIER . type
 
-    ':'  shift, and go to state 52
+    ':'  shift, and go to state 53
 
     type  go to state 148
 
@@ -2417,17 +2409,18 @@ State 143
 
     FALSE             shift, and go to state 24
     TRUE              shift, and go to state 33
-    IDENTIFIER        shift, and go to state 64
-    INT_NUM           shift, and go to state 35
-    REAL_NUM          shift, and go to state 36
-    STRING_CONSTANTS  shift, and go to state 37
-    '-'               shift, and go to state 38
-    '('               shift, and go to state 39
+    NOT               shift, and go to state 34
+    IDENTIFIER        shift, and go to state 65
+    INT_NUM           shift, and go to state 36
+    REAL_NUM          shift, and go to state 37
+    STRING_CONSTANTS  shift, and go to state 38
+    '-'               shift, and go to state 39
+    '('               shift, and go to state 40
 
-    constant_exp        go to state 41
-    expression          go to state 105
-    function_procedure  go to state 45
-    array_reference     go to state 46
+    constant_exp        go to state 42
+    expression          go to state 106
+    function_procedure  go to state 46
+    array_reference     go to state 47
     func_expression     go to state 154
 
 
@@ -2472,7 +2465,7 @@ State 149
 
    34 function: FUNCTION IDENTIFIER $@1 '(' parameters_block ')' . type function_bodys END IDENTIFIER
 
-    ':'  shift, and go to state 52
+    ':'  shift, and go to state 53
 
     type  go to state 158
 
@@ -2537,28 +2530,29 @@ State 155
     SKIP              shift, and go to state 32
     TRUE              shift, and go to state 33
     VAR               shift, and go to state 8
-    IDENTIFIER        shift, and go to state 34
-    INT_NUM           shift, and go to state 35
-    REAL_NUM          shift, and go to state 36
-    STRING_CONSTANTS  shift, and go to state 37
-    '-'               shift, and go to state 38
-    '('               shift, and go to state 39
+    NOT               shift, and go to state 34
+    IDENTIFIER        shift, and go to state 35
+    INT_NUM           shift, and go to state 36
+    REAL_NUM          shift, and go to state 37
+    STRING_CONSTANTS  shift, and go to state 38
+    '-'               shift, and go to state 39
+    '('               shift, and go to state 40
 
     statement           go to state 137
     declaration         go to state 138
     constants           go to state 12
-    constant_exp        go to state 41
+    constant_exp        go to state 42
     variable            go to state 13
     array               go to state 14
     function_body       go to state 139
-    block               go to state 42
-    simple              go to state 43
-    expression          go to state 44
-    function_procedure  go to state 45
-    array_reference     go to state 46
-    if_head             go to state 47
-    condition           go to state 48
-    loop                go to state 49
+    block               go to state 43
+    simple              go to state 44
+    expression          go to state 45
+    function_procedure  go to state 46
+    array_reference     go to state 47
+    if_head             go to state 48
+    condition           go to state 49
+    loop                go to state 50
 
 
 State 156
@@ -2615,28 +2609,29 @@ State 160
     SKIP              shift, and go to state 32
     TRUE              shift, and go to state 33
     VAR               shift, and go to state 8
-    IDENTIFIER        shift, and go to state 34
-    INT_NUM           shift, and go to state 35
-    REAL_NUM          shift, and go to state 36
-    STRING_CONSTANTS  shift, and go to state 37
-    '-'               shift, and go to state 38
-    '('               shift, and go to state 39
+    NOT               shift, and go to state 34
+    IDENTIFIER        shift, and go to state 35
+    INT_NUM           shift, and go to state 36
+    REAL_NUM          shift, and go to state 37
+    STRING_CONSTANTS  shift, and go to state 38
+    '-'               shift, and go to state 39
+    '('               shift, and go to state 40
 
     statement           go to state 137
     declaration         go to state 138
     constants           go to state 12
-    constant_exp        go to state 41
+    constant_exp        go to state 42
     variable            go to state 13
     array               go to state 14
     function_body       go to state 139
-    block               go to state 42
-    simple              go to state 43
-    expression          go to state 44
-    function_procedure  go to state 45
-    array_reference     go to state 46
-    if_head             go to state 47
-    condition           go to state 48
-    loop                go to state 49
+    block               go to state 43
+    simple              go to state 44
+    expression          go to state 45
+    function_procedure  go to state 46
+    array_reference     go to state 47
+    if_head             go to state 48
+    condition           go to state 49
+    loop                go to state 50
 
 
 State 161
@@ -2684,28 +2679,29 @@ State 164
     SKIP              shift, and go to state 32
     TRUE              shift, and go to state 33
     VAR               shift, and go to state 8
-    IDENTIFIER        shift, and go to state 34
-    INT_NUM           shift, and go to state 35
-    REAL_NUM          shift, and go to state 36
-    STRING_CONSTANTS  shift, and go to state 37
-    '-'               shift, and go to state 38
-    '('               shift, and go to state 39
+    NOT               shift, and go to state 34
+    IDENTIFIER        shift, and go to state 35
+    INT_NUM           shift, and go to state 36
+    REAL_NUM          shift, and go to state 37
+    STRING_CONSTANTS  shift, and go to state 38
+    '-'               shift, and go to state 39
+    '('               shift, and go to state 40
 
     statement           go to state 137
     declaration         go to state 138
     constants           go to state 12
-    constant_exp        go to state 41
+    constant_exp        go to state 42
     variable            go to state 13
     array               go to state 14
     function_body       go to state 139
-    block               go to state 42
-    simple              go to state 43
-    expression          go to state 44
-    function_procedure  go to state 45
-    array_reference     go to state 46
-    if_head             go to state 47
-    condition           go to state 48
-    loop                go to state 49
+    block               go to state 43
+    simple              go to state 44
+    expression          go to state 45
+    function_procedure  go to state 46
+    array_reference     go to state 47
+    if_head             go to state 48
+    condition           go to state 49
+    loop                go to state 50
 
 
 State 165
@@ -2733,7 +2729,7 @@ State 168
 
    30 array: ARRAY IDENTIFIER ':' ARRAY number '.' '.' number OF . type
 
-    ':'  shift, and go to state 52
+    ':'  shift, and go to state 53
 
     type  go to state 172
 
@@ -2822,28 +2818,29 @@ State 177
     SKIP              shift, and go to state 32
     TRUE              shift, and go to state 33
     VAR               shift, and go to state 8
-    IDENTIFIER        shift, and go to state 34
-    INT_NUM           shift, and go to state 35
-    REAL_NUM          shift, and go to state 36
-    STRING_CONSTANTS  shift, and go to state 37
-    '-'               shift, and go to state 38
-    '('               shift, and go to state 39
+    NOT               shift, and go to state 34
+    IDENTIFIER        shift, and go to state 35
+    INT_NUM           shift, and go to state 36
+    REAL_NUM          shift, and go to state 37
+    STRING_CONSTANTS  shift, and go to state 38
+    '-'               shift, and go to state 39
+    '('               shift, and go to state 40
 
     statement           go to state 137
     declaration         go to state 138
     constants           go to state 12
-    constant_exp        go to state 41
+    constant_exp        go to state 42
     variable            go to state 13
     array               go to state 14
     function_body       go to state 139
-    block               go to state 42
-    simple              go to state 43
-    expression          go to state 44
-    function_procedure  go to state 45
-    array_reference     go to state 46
-    if_head             go to state 47
-    condition           go to state 48
-    loop                go to state 49
+    block               go to state 43
+    simple              go to state 44
+    expression          go to state 45
+    function_procedure  go to state 46
+    array_reference     go to state 47
+    if_head             go to state 48
+    condition           go to state 49
+    loop                go to state 50
 
 
 State 178
