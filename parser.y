@@ -341,7 +341,7 @@ expression:    expression '+' expression
         {
                 /* type check */
                 if($1->S_type != $3->S_type)
-                        yyerror("type mismatch");
+                        cout << "WARNING:type mismatch" << endl;
 
                 
                 if($1->S_type == type::INT_TYPE)
@@ -355,7 +355,7 @@ expression:    expression '+' expression
         {
                 /* type check */
                 if($1->S_type != $3->S_type)
-                        yyerror("type mismatch");
+                        cout << "WARNING:type mismatch" << endl;
 
                 
                 if($1->S_type == type::INT_TYPE)
@@ -369,7 +369,7 @@ expression:    expression '+' expression
         {
                 /* type check */
                 if($1->S_type != $3->S_type)
-                        yyerror("type mismatch");
+                        cout << "WARNING:type mismatch" << endl;
 
                 
                 if($1->S_type == type::INT_TYPE)
@@ -383,7 +383,7 @@ expression:    expression '+' expression
         {
                 /* type check */
                 if($1->S_type != $3->S_type)
-                        yyerror("type mismatch");
+                        cout << "WARNING:type mismatch" << endl;
 
                 
                 if($1->S_type == type::INT_TYPE)
@@ -397,7 +397,7 @@ expression:    expression '+' expression
         {
                 /* type check */
                 if($1->S_type != $3->S_type)
-                        yyerror("type mismatch");
+                        cout << "WARNING:type mismatch" << endl;
 
                 
                 if($1->S_type == type::INT_TYPE)
@@ -418,7 +418,7 @@ expression:    expression '+' expression
         {
                 /* type check */
                 if($1->S_type != $3->S_type)
-                        yyerror("type mismatch");
+                        cout << "WARNING:type mismatch" << endl;
 
                 
                 if($1->S_type == type::BOOL_TYPE)
@@ -430,7 +430,7 @@ expression:    expression '+' expression
         {
                 /* type check */
                 if($1->S_type != $3->S_type)
-                        yyerror("type mismatch");
+                        cout << "WARNING:type mismatch" << endl;
 
                 
                 if($1->S_type == type::BOOL_TYPE)
@@ -450,7 +450,7 @@ expression:    expression '+' expression
         {
                 /* type check */
                 if($1->S_type != $3->S_type)
-                        yyerror("type mismatch");
+                        cout << "WARNING:type mismatch" << endl;
 
                 
                 if($1->S_type == type::INT_TYPE)
@@ -464,7 +464,7 @@ expression:    expression '+' expression
         {
                 /* type check */
                 if($1->S_type != $3->S_type)
-                        yyerror("type mismatch");
+                        cout << "WARNING:type mismatch" << endl;
 
                 
                 if($1->S_type == type::INT_TYPE)
@@ -478,7 +478,7 @@ expression:    expression '+' expression
         {
                 /* type check */
                 if($1->S_type != $3->S_type)
-                        yyerror("type mismatch");
+                        cout << "WARNING:type mismatch" << endl;
 
                 if($1->S_type == type::INT_TYPE)
                         $$ = boolConst($1->S_data.int_data == $3->S_data.int_data);
@@ -493,7 +493,7 @@ expression:    expression '+' expression
         {
                 /* type check */
                 if($1->S_type != $3->S_type)
-                        yyerror("type mismatch");
+                        cout << "WARNING:type mismatch" << endl;
 
                 if($1->S_type == type::INT_TYPE)
                         $$ = boolConst($1->S_data.int_data >= $3->S_data.int_data);
@@ -506,7 +506,7 @@ expression:    expression '+' expression
         {
                 /* type check */
                 if($1->S_type != $3->S_type)
-                        yyerror("type mismatch");
+                        cout << "WARNING:type mismatch" << endl;
 
                 if($1->S_type == type::INT_TYPE)
                         $$ = boolConst($1->S_data.int_data > $3->S_data.int_data);
@@ -519,7 +519,7 @@ expression:    expression '+' expression
         {
                 /* type check */
                 if($1->S_type != $3->S_type)
-                        yyerror("type mismatch");
+                        cout << "WARNING:type mismatch" << endl;
 
                 if($1->S_type == type::INT_TYPE)
                         $$ = boolConst($1->S_data.int_data != $3->S_data.int_data);

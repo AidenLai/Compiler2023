@@ -1859,7 +1859,7 @@ yyreduce:
     {
                 /* type check */
                 if((yyvsp[-2].symval)->S_type != (yyvsp[0].symval)->S_type)
-                        yyerror("type mismatch");
+                        cout << "WARNING:type mismatch" << endl;
 
                 
                 if((yyvsp[-2].symval)->S_type == type::INT_TYPE)
@@ -1877,7 +1877,7 @@ yyreduce:
     {
                 /* type check */
                 if((yyvsp[-2].symval)->S_type != (yyvsp[0].symval)->S_type)
-                        yyerror("type mismatch");
+                        cout << "WARNING:type mismatch" << endl;
 
                 
                 if((yyvsp[-2].symval)->S_type == type::INT_TYPE)
@@ -1895,7 +1895,7 @@ yyreduce:
     {
                 /* type check */
                 if((yyvsp[-2].symval)->S_type != (yyvsp[0].symval)->S_type)
-                        yyerror("type mismatch");
+                        cout << "WARNING:type mismatch" << endl;
 
                 
                 if((yyvsp[-2].symval)->S_type == type::INT_TYPE)
@@ -1913,7 +1913,7 @@ yyreduce:
     {
                 /* type check */
                 if((yyvsp[-2].symval)->S_type != (yyvsp[0].symval)->S_type)
-                        yyerror("type mismatch");
+                        cout << "WARNING:type mismatch" << endl;
 
                 
                 if((yyvsp[-2].symval)->S_type == type::INT_TYPE)
@@ -1931,7 +1931,7 @@ yyreduce:
     {
                 /* type check */
                 if((yyvsp[-2].symval)->S_type != (yyvsp[0].symval)->S_type)
-                        yyerror("type mismatch");
+                        cout << "WARNING:type mismatch" << endl;
 
                 
                 if((yyvsp[-2].symval)->S_type == type::INT_TYPE)
@@ -1960,7 +1960,7 @@ yyreduce:
     {
                 /* type check */
                 if((yyvsp[-2].symval)->S_type != (yyvsp[0].symval)->S_type)
-                        yyerror("type mismatch");
+                        cout << "WARNING:type mismatch" << endl;
 
                 
                 if((yyvsp[-2].symval)->S_type == type::BOOL_TYPE)
@@ -1976,7 +1976,7 @@ yyreduce:
     {
                 /* type check */
                 if((yyvsp[-2].symval)->S_type != (yyvsp[0].symval)->S_type)
-                        yyerror("type mismatch");
+                        cout << "WARNING:type mismatch" << endl;
 
                 
                 if((yyvsp[-2].symval)->S_type == type::BOOL_TYPE)
@@ -2004,7 +2004,7 @@ yyreduce:
     {
                 /* type check */
                 if((yyvsp[-2].symval)->S_type != (yyvsp[0].symval)->S_type)
-                        yyerror("type mismatch");
+                        cout << "WARNING:type mismatch" << endl;
 
                 
                 if((yyvsp[-2].symval)->S_type == type::INT_TYPE)
@@ -2022,7 +2022,7 @@ yyreduce:
     {
                 /* type check */
                 if((yyvsp[-2].symval)->S_type != (yyvsp[0].symval)->S_type)
-                        yyerror("type mismatch");
+                        cout << "WARNING:type mismatch" << endl;
 
                 
                 if((yyvsp[-2].symval)->S_type == type::INT_TYPE)
@@ -2040,7 +2040,7 @@ yyreduce:
     {
                 /* type check */
                 if((yyvsp[-2].symval)->S_type != (yyvsp[0].symval)->S_type)
-                        yyerror("type mismatch");
+                        cout << "WARNING:type mismatch" << endl;
 
                 if((yyvsp[-2].symval)->S_type == type::INT_TYPE)
                         (yyval.symval) = boolConst((yyvsp[-2].symval)->S_data.int_data == (yyvsp[0].symval)->S_data.int_data);
@@ -2059,7 +2059,7 @@ yyreduce:
     {
                 /* type check */
                 if((yyvsp[-2].symval)->S_type != (yyvsp[0].symval)->S_type)
-                        yyerror("type mismatch");
+                        cout << "WARNING:type mismatch" << endl;
 
                 if((yyvsp[-2].symval)->S_type == type::INT_TYPE)
                         (yyval.symval) = boolConst((yyvsp[-2].symval)->S_data.int_data >= (yyvsp[0].symval)->S_data.int_data);
@@ -2076,7 +2076,7 @@ yyreduce:
     {
                 /* type check */
                 if((yyvsp[-2].symval)->S_type != (yyvsp[0].symval)->S_type)
-                        yyerror("type mismatch");
+                        cout << "WARNING:type mismatch" << endl;
 
                 if((yyvsp[-2].symval)->S_type == type::INT_TYPE)
                         (yyval.symval) = boolConst((yyvsp[-2].symval)->S_data.int_data > (yyvsp[0].symval)->S_data.int_data);
@@ -2093,7 +2093,7 @@ yyreduce:
     {
                 /* type check */
                 if((yyvsp[-2].symval)->S_type != (yyvsp[0].symval)->S_type)
-                        yyerror("type mismatch");
+                        cout << "WARNING:type mismatch" << endl;
 
                 if((yyvsp[-2].symval)->S_type == type::INT_TYPE)
                         (yyval.symval) = boolConst((yyvsp[-2].symval)->S_data.int_data != (yyvsp[0].symval)->S_data.int_data);
