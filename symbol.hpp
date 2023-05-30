@@ -41,6 +41,7 @@ public:
     type S_type;
     flag S_flag;
     bool init = false;
+    int index = -1;
 
     Symbol(string id_)
     {

@@ -1,10 +1,14 @@
 %{
-#include "symboltable.hpp"
+#include "codegen.hpp"
 #include "lex.yy.cpp"
+#include <sstream>
 #define Trace(t)        printf(t)
 void yyerror(string s);
 symboltables symtab;
 int param_num = 0;
+string filename;
+string className;
+ofstream ex;
 %}
 
 /* tokens */
@@ -40,7 +44,20 @@ int param_num = 0;
 %precedence ASSIGN '(' '['
 
 %%
-program:    declarations statements
+program:    
+        {
+                G_init();
+        }
+        declarations 
+        {
+                G_main();
+        }
+        statements
+        {
+                G_Return();
+                G_main_end();
+                G_end();
+        }
         ;
 statements:     statements statement
         |
@@ -308,7 +325,14 @@ simple:     IDENTIFIER ASSIGN expression
                 s->init = true;
                 s->S_data = $3->S_data;
         }
-        |   PUT expression
+        |   PUT 
+        {
+                G_put_Start();
+        }
+        expression
+        {
+                G_put($3->S_type);
+        }
         |   GET IDENTIFIER
         {
                 /* check if the identifier is in the symbol table */
@@ -326,6 +350,9 @@ simple:     IDENTIFIER ASSIGN expression
         |   RETURN
         |   EXIT when
         |   SKIP
+        {
+                G_skip();
+        }
         |   expression
         ;
 when:    WHEN expression
@@ -544,8 +571,35 @@ expression:    expression '+' expression
                         yyerror("Not a variable error");
                         
                 $$ = symtab.global_lookup(*($1));
+                Symbol *temp = symtab.global_lookup(*($1));
+                if(temp->S_flag == flag::CONSTANT)
+                {
+                        if(temp->S_type == type::INT_TYPE)
+                                G_const_Int(temp->S_data.int_data);
+                        else if(temp->S_type == type::BOOL_TYPE)
+                                G_const_Bool(temp->S_data.bool_data);
+                        else if(temp->S_type == type::STRING_TYPE)
+                                G_const_Str(temp->S_data.string_data);
+                }
+                else
+                {
+                        int index = symtab.global_lookup(*($1))->index;
+                        if(index == -1)
+                                G_get_global_Var(*$1);
+                        else
+                                G_get_local_Var(index);
+                }
         }
         |   constant_exp
+        {
+                if($1->S_type == type::INT_TYPE)
+                        G_const_Int($1->S_data.int_data);
+                else if($1->S_type == type::BOOL_TYPE)
+                        G_const_Bool($1->S_data.bool_data);
+                else if($1->S_type == type::STRING_TYPE)
+                        G_const_Str($1->S_data.string_data);
+                        
+        }
         |   function_procedure
         |   array_reference
         ;
@@ -666,6 +720,24 @@ int main(int argc, char *argv[])
         exit(1);
     }
     yyin = fopen(argv[1], "r");         /* open input file */
+    
+
+    filename = string(argv[1]);
+    std::vector<std::string> tokens;
+    std::string token;
+    std::stringstream ss(filename);
+    while (getline(ss, token, '/')){
+        tokens.push_back(token);
+    }
+    className = tokens.back();
+    className.pop_back();
+    className.pop_back();
+    className.pop_back();
+    filename += ".jasm";
+    string jasmfolder = "jasmFile";
+    filename = filename.replace(2,4,jasmfolder,0,8);
+        	
+    ex.open(filename);
 
     /* perform parsing */
     if (yyparse() == 1)                 /* parsing */

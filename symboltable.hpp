@@ -7,6 +7,7 @@ using namespace std;
 class SymbolTable {
     public:
         vector<Symbol> table;
+        int index = 0;
         SymbolTable(){};
         ~SymbolTable(){};
         void insert(string id)
@@ -51,6 +52,8 @@ class symboltables {
             symbol.id = id;
             if(lookup(id) == NULL)
                 tables.back().table.push_back(symbol);
+            if(isGlobal(id))
+                tables.back().table.back().index = tables.back().index++;
         }
         Symbol *lookup(string id)
         {
@@ -78,5 +81,13 @@ class symboltables {
         {
             for(vector<SymbolTable>::iterator it = tables.begin(); it != tables.end(); ++it)
                 it->dump();
+        }
+        bool isGlobal(string id)
+        {
+            return tables.front().lookup(id) != NULL;
+        }
+        int get_index(string id)
+        {
+            return tables.back().lookup(id)->index;
         }
 };
