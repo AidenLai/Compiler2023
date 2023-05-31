@@ -2,3 +2,5 @@ lex.yy.cpp
 a.out
 *.o
 *.gch
+jasmFile/
+*.class

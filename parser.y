@@ -156,6 +156,11 @@ variable:   VAR IDENTIFIER type ASSIGN constant_exp
                 $5->S_flag = flag::VARIABLE;
                 /* insert the identifier into the symbol table */
                 symtab.insert(*($2), *$5);
+                int index = symtab.get_index(*($2));
+                if(index == -1)
+                        G_global_Var(*$2, $5->S_data.int_data);
+                else
+                        G_local_Var(index, $5->S_data.int_data);
         }
         |   VAR IDENTIFIER type
         {
@@ -168,6 +173,11 @@ variable:   VAR IDENTIFIER type ASSIGN constant_exp
                 s.S_type = $3;
                 s.S_flag = flag::VARIABLE;
                 symtab.insert(*($2), s);
+                
+                int index = symtab.get_index(*($2));
+                if(index == -1)
+                        G_global_Var(*$2);
+                
         }
         |   VAR IDENTIFIER ASSIGN constant_exp
         {
@@ -179,6 +189,11 @@ variable:   VAR IDENTIFIER type ASSIGN constant_exp
                 $4->S_flag = flag::VARIABLE;
                 /* insert the identifier into the symbol table */
                 symtab.insert(*($2), *$4);
+                int index = symtab.get_index(*($2));
+                if(index == -1)
+                        G_global_Var(*$2, $4->S_data.int_data);
+                else
+                        G_local_Var(index, $4->S_data.int_data);
         }
         ;
 array:  ARRAY IDENTIFIER ':' ARRAY number '.' '.' number OF type
@@ -228,7 +243,13 @@ function:  FUNCTION IDENTIFIER
                 symtab.push();
                 param_num = 0;
         }
-        '(' parameters_block ')' type function_bodys END IDENTIFIER
+        '(' parameters_block ')' type 
+        {
+                Symbol *temp = symtab.global_lookup(*($2));
+                temp->param_num = param_num;
+                G_method_Start(*symtab.global_lookup(*($2)));
+        }
+        function_bodys END IDENTIFIER
         {
                 cout<<"<-----------------------local variable------------------->"<<endl;
                 symtab.tables.back().dump();
@@ -237,8 +258,9 @@ function:  FUNCTION IDENTIFIER
                 symtab.tables.back().table.back().S_type = $7;
                 symtab.tables.back().table.back().param_num = param_num;
                 param_num = 0;
-                if (*$2 != *$10)
+                if (*$2 != *$11)
                         yyerror("function declaration error");
+                G_main_end();
         }
         ;
 procedure:  PROCEDURE IDENTIFIER
@@ -255,7 +277,13 @@ procedure:  PROCEDURE IDENTIFIER
                 symtab.push();
                 param_num = 0;
         }
-        '(' parameters_block ')' function_bodys END IDENTIFIER
+        '(' parameters_block ')' 
+        {
+                Symbol *temp = symtab.global_lookup(*($2));
+                temp->param_num = param_num;
+                G_method_Start(*symtab.global_lookup(*($2)));
+        }
+        function_bodys END IDENTIFIER
         {
                 cout<<"<-----------------------local variable------------------->"<<endl;
                 symtab.tables.back().dump();
@@ -263,8 +291,9 @@ procedure:  PROCEDURE IDENTIFIER
                 symtab.pop();
                 symtab.tables.back().table.back().param_num = param_num;
                 param_num = 0;
-                if (*$2 != *$9)
+                if (*$2 != *$10)
                         yyerror("function declaration error");
+                G_main_end();
         }
         ;
 function_bodys:  function_bodys function_body
@@ -324,6 +353,11 @@ simple:     IDENTIFIER ASSIGN expression
                 Symbol *s = symtab.global_lookup(*($1));
                 s->init = true;
                 s->S_data = $3->S_data;
+                int index = symtab.get_index(*($1));
+                if(index == -1)
+                        G_set_global_Var(*$1);
+                else
+                        G_set_local_Var(index);
         }
         |   PUT 
         {
@@ -347,19 +381,26 @@ simple:     IDENTIFIER ASSIGN expression
                 s->init = true;
         }
         |   RESULT expression
+        {
+                G_IReturn();
+        }
         |   RETURN
+        {
+                G_Return();
+        }
         |   EXIT when
         |   SKIP
         {
                 G_skip();
         }
-        |   expression
+        | function_procedure
         ;
 when:    WHEN expression
         {
                 /* type check */
                 if($2->S_type != type::BOOL_TYPE)
                         yyerror("type mismatch");
+                G_While("while_con");
         }
         |
         ;
@@ -377,6 +418,7 @@ expression:    expression '+' expression
                         $$ = realConst($1->S_data.real_data + $3->S_data.real_data);
                 else
                         yyerror("operator error");
+                G_Operator('+');
         }
         |   expression '-' expression
         {
@@ -391,6 +433,8 @@ expression:    expression '+' expression
                         $$ = realConst($1->S_data.real_data - $3->S_data.real_data);
                 else
                         yyerror("operator error");
+                cout <<"Reduce exp - exp"<<endl;
+                G_Operator('-');
         }
         |   expression '*' expression
         {
@@ -405,6 +449,8 @@ expression:    expression '+' expression
                         $$ = realConst($1->S_data.real_data * $3->S_data.real_data);
                 else
                         yyerror("operator error");
+                
+                G_Operator('*');
         }
         |   expression '/' expression
         {
@@ -419,6 +465,8 @@ expression:    expression '+' expression
                         $$ = realConst($1->S_data.real_data / $3->S_data.real_data);
                 else
                         yyerror("operator error");
+                
+                G_Operator('/');
         }
         |   expression MOD expression
         {
@@ -431,6 +479,8 @@ expression:    expression '+' expression
                         $$ = intConst($1->S_data.int_data % $3->S_data.int_data);
                 else
                         yyerror("operator error");
+                
+                G_Operator('%');
         }
         |   '-' expression    %prec UMINUS
         {
@@ -440,6 +490,9 @@ expression:    expression '+' expression
                         $$ = realConst(-$2->S_data.real_data);
                 else
                         yyerror("operator error");
+
+                cout <<"Reduce - exp"<<endl;
+                G_Operator('m');
         }
         |   expression AND expression
         {
@@ -452,6 +505,8 @@ expression:    expression '+' expression
                         $$ = boolConst($1->S_data.bool_data && $3->S_data.bool_data);
                 else
                         yyerror("operator error");
+                G_Operator('&');
+                
         }
         |   expression OR expression
         {
@@ -464,6 +519,8 @@ expression:    expression '+' expression
                         $$ = boolConst($1->S_data.bool_data || $3->S_data.bool_data);
                 else
                         yyerror("operator error");
+                
+                G_Operator('|');
         }
         |   NOT expression
         {
@@ -472,6 +529,9 @@ expression:    expression '+' expression
                         $$ = $2;
                 else
                         yyerror("operator error");
+                
+                G_Operator('!');
+                
         }
         |   expression '<' expression
         {
@@ -486,6 +546,8 @@ expression:    expression '+' expression
                         $$ = boolConst($1->S_data.real_data < $3->S_data.real_data);
                 else
                         yyerror("operator error");
+                
+                G_Compare(IFLT);  
         }
         |   expression LE  expression
         {
@@ -500,6 +562,8 @@ expression:    expression '+' expression
                         $$ = boolConst($1->S_data.real_data <= $3->S_data.real_data);
                 else
                         yyerror("operator error");
+                
+                G_Compare(IFLE);  
         }
         |   expression '=' expression
         {
@@ -515,6 +579,8 @@ expression:    expression '+' expression
                         $$ = boolConst($1->S_data.bool_data == $3->S_data.bool_data);
                 else
                         yyerror("operator error");
+                
+                G_Compare(IFEE);  
         }
         |   expression GE expression
         {
@@ -528,6 +594,8 @@ expression:    expression '+' expression
                         $$ = boolConst($1->S_data.real_data >= $3->S_data.real_data);
                 else
                         yyerror("operator error");
+
+                G_Compare(IFGE);  
         }
         |   expression '>' expression
         {
@@ -541,6 +609,8 @@ expression:    expression '+' expression
                         $$ = boolConst($1->S_data.real_data > $3->S_data.real_data);
                 else
                         yyerror("operator error");
+
+                G_Compare(IFGT);  
         }
         |   expression NOT_EQU expression
         {
@@ -556,6 +626,7 @@ expression:    expression '+' expression
                         $$ = boolConst($1->S_data.bool_data != $3->S_data.bool_data);
                 else
                         yyerror("operator error");
+                G_Compare(IFNE);  
         }
         |   '(' expression ')'
         {
@@ -616,6 +687,8 @@ function_procedure:     IDENTIFIER '(' argument_body ')'
                 {
                         param_num = 0;
                         $$ = symtab.global_lookup(*($1));
+                        Symbol *temp = symtab.global_lookup(*($1));
+                        G_call_Func(*temp);
                 }
                        
         }
@@ -650,14 +723,28 @@ if_head : IF expression
         {
                 if($2->S_type != type::BOOL_TYPE)
                         yyerror("Condition must be a boolean");
+                
+                G_If("if_start");
+        
         }
-condition:  if_head THEN function_bodys ELSE function_bodys END IF
+condition:  if_head THEN function_bodys ELSE
+        {
+                G_If("else");
+        }
+        function_bodys END IF
+        {
+                G_If("if_else_end");
+        }
         |   if_head THEN function_bodys END IF
+        {
+                G_If("if_end");
+        }
         ;
 
 loop:   LOOP
         {
                 symtab.push();
+                G_While("while_start");
         } 
         function_bodys END LOOP
         {
@@ -665,6 +752,7 @@ loop:   LOOP
                 symtab.tables.back().dump();
                 cout<<"<-----------------------local variable end--------------->"<<endl;
                 symtab.pop();
+                G_While("while_end");
         }
         |   FOR decreasing
         {
@@ -682,13 +770,23 @@ loop:   LOOP
                 s.S_flag = flag::VARIABLE;
                 symtab.insert(*($4), s);
         }
-        ':' number '.' '.' number
+        ':' number
         {
-                if($7->S_flag != flag::CONSTANT || $10->S_flag != flag::CONSTANT)
+                G_local_Var(symtab.lookup(*($4))->index, $7->S_data.int_data);
+        } 
+        '.' '.' number
+        {
+                if($7->S_flag != flag::CONSTANT || $11->S_flag != flag::CONSTANT)
                         yyerror("Index must be a variable");
 
-                if($7->S_type != type::INT_TYPE || $10->S_type != type::INT_TYPE)
+                if($7->S_type != type::INT_TYPE || $11->S_type != type::INT_TYPE)
                         yyerror("Index must be an integer");
+                
+                G_While("while_start");
+                G_For(symtab.lookup(*($4))->index, $11->S_data.int_data);
+                G_Compare(IFLT);
+                G_While("while_con");
+                
         }
         function_bodys END FOR
         {
@@ -696,6 +794,7 @@ loop:   LOOP
                 symtab.tables.back().dump();
                 cout<<"<-----------------------local variable end--------------->"<<endl;
                 symtab.pop();
+                G_While("while_end");
         }
         
         ;

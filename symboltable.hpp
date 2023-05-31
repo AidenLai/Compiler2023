@@ -31,7 +31,7 @@ class SymbolTable {
         void dump()
         {
             for(vector<Symbol>::iterator it = table.begin(); it != table.end(); ++it)
-                cout << it->id << endl;
+                cout << it->id << "\t" << it->index << endl;
         }
 };
 
@@ -52,7 +52,8 @@ class symboltables {
             symbol.id = id;
             if(lookup(id) == NULL)
                 tables.back().table.push_back(symbol);
-            if(isGlobal(id))
+            
+            if(!isGlobal(id))
                 tables.back().table.back().index = tables.back().index++;
         }
         Symbol *lookup(string id)
@@ -82,12 +83,17 @@ class symboltables {
             for(vector<SymbolTable>::iterator it = tables.begin(); it != tables.end(); ++it)
                 it->dump();
         }
+        bool isGlobal()
+        {
+            cout<<tables.size()<<endl;
+            return tables.size() == 1;
+        }
         bool isGlobal(string id)
         {
-            return tables.front().lookup(id) != NULL;
+            return tables[0].lookup(id) != NULL && (lookup(id) == NULL || tables.size() == 1);
         }
         int get_index(string id)
         {
-            return tables.back().lookup(id)->index;
+            return global_lookup(id)->index;
         }
 };
