@@ -761,6 +761,7 @@ loop:   LOOP
         IDENTIFIER
         {
                 /* check if the identifier is already in the symbol table */
+                /*
                 if(symtab.lookup(*($4)) != NULL)
                         yyerror("variable redefine");
                 
@@ -769,10 +770,16 @@ loop:   LOOP
                 s.S_type = type::INT_TYPE;
                 s.S_flag = flag::VARIABLE;
                 symtab.insert(*($4), s);
+                */
         }
         ':' number
         {
-                G_local_Var(symtab.lookup(*($4))->index, $7->S_data.int_data);
+                G_const_Int($7->S_data.int_data);
+                if(symtab.global_lookup(*($4))->index == -1)
+                        G_set_global_Var(*($4));
+                else
+                        G_set_local_Var(symtab.global_lookup(*($4))->index);
+                
         } 
         '.' '.' number
         {
@@ -783,12 +790,19 @@ loop:   LOOP
                         yyerror("Index must be an integer");
                 
                 G_While("while_start");
-                G_For(symtab.lookup(*($4))->index, $11->S_data.int_data);
-                G_Compare(IFLT);
+                if(symtab.global_lookup(*($4))->index == -1)
+                        G_For(*($4), $11->S_data.int_data);
+                else
+                        G_For(symtab.global_lookup(*($4))->index, $11->S_data.int_data);
+                G_Compare(IFGT);
                 G_While("while_con");
                 
         }
-        function_bodys END FOR
+        function_bodys
+        {
+                G_For_Body(*$4);
+        } 
+        END FOR
         {
                 cout<<"<-----------------------local variable------------------->"<<endl;
                 symtab.tables.back().dump();
@@ -837,6 +851,10 @@ int main(int argc, char *argv[])
     filename = filename.replace(2,4,jasmfolder,0,8);
         	
     ex.open(filename);
+
+    ex << "/*------------------------------------------------*/" << endl;
+    ex << "/*              Java Assembly Code                */" << endl;
+    ex << "/*------------------------------------------------*/" << endl;
 
     /* perform parsing */
     if (yyparse() == 1)                 /* parsing */

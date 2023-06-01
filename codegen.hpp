@@ -264,10 +264,10 @@ void G_Compare(int op)
   int l1 = lm.getLable();
   int l2 = lm.getLable();
   ex << " L" << l1 << endl;
-  ex << "\t\ticonst_1" << endl;
+  ex << "\t\ticonst_0" << endl;
   ex << "\t\tgoto L" << l2 << endl;
   ex << "L" << l1 << ":" << endl;
-  ex << "\t\ticonst_0" << endl;
+  ex << "\t\ticonst_1" << endl;
   ex << "L" << l2 << ":" << endl;
 }
 
@@ -361,7 +361,7 @@ void G_While(string mode)
   else if (mode == "while_con")
   {
     lm.NLabel(1);
-    ex << "\t\tifeq L" << lm.takeLabel(3 + lm.getFlag()) << endl;
+    ex << "\t\tifne L" << lm.takeLabel(3 + lm.getFlag()) << endl;
   }
   else if (mode == "while_end")
   {
@@ -375,4 +375,18 @@ void G_For(int index, int value)
 {
   G_get_local_Var(index);
   ex << "\t\tsipush " << value << "\n";
+}
+
+void G_For(string id, int value)
+{
+  G_get_global_Var(id);
+  ex << "\t\tsipush " << value << "\n";
+}
+
+void G_For_Body(string id)
+{
+  G_get_global_Var(id);
+  G_const_Int(1);
+  G_Operator('+');
+  G_set_global_Var(id);
 }

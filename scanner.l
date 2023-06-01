@@ -13,6 +13,7 @@ using namespace std;
 int linenum = 1;
 char buf[MAX_LINE_LENG];
 
+
 SymbolTable symboltable;
 %}
 
