@@ -1,12 +1,12 @@
 #include <iostream>
 #include <fstream>
-#include <stack>
 #include "symboltable.hpp"
 using namespace std;
 
 
-struct label
+class label
 {
+public:
   // count
   int Count;
   //flag
@@ -16,46 +16,56 @@ struct label
     Count = input;
     labelFlag = -1;
   };
+
+  ~label(){};
 };
 
 class LabelManager
 {
 private:
   int counts;
+  vector<label> labelVector;
 
 public:
-  stack<label> labelStack;
   LabelManager()
   {
     counts = 0;
   }
+
   void pushNLable(int n)
   {
-    labelStack.push(label(counts));
+    labelVector.push_back(label(counts));
     counts += n;
   }
+
   void NLabel(int n)
   {
-    labelStack.top().Count += n;
+    labelVector.back().Count += n;
     counts += n;
   }
+
   void popLabel()
   {
-    labelStack.pop();
+    labelVector.pop_back();
   }
+
   int takeLabel(int n)
   {
-    return labelStack.top().Count + n;
+    return labelVector.back().Count + n;
   }
+
   int getLable()
   {
     return counts++;
   }
+
   int getFlag()
   {
-    return labelStack.top().labelFlag;
+    return labelVector.back().labelFlag;
   }
 };
+
+
 LabelManager labelManager;
 
 extern ofstream output;
