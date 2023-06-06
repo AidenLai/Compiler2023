@@ -1881,7 +1881,7 @@ yyreduce:
   case 54:
 #line 363 "parser.y" /* yacc.c:1646  */
     {
-                G_put_Start();
+                G_put_Dec();
         }
 #line 1887 "y.tab.cpp" /* yacc.c:1646  */
     break;
@@ -1914,7 +1914,7 @@ yyreduce:
   case 57:
 #line 384 "parser.y" /* yacc.c:1646  */
     {
-                G_IReturn();
+                G_Result();
         }
 #line 1920 "y.tab.cpp" /* yacc.c:1646  */
     break;
@@ -1941,7 +1941,7 @@ yyreduce:
                 /* type check */
                 if((yyvsp[0].symval)->S_type != type::BOOL_TYPE)
                         yyerror("type mismatch");
-                G_Loop("loop_con");
+                G_When();
         }
 #line 1947 "y.tab.cpp" /* yacc.c:1646  */
     break;
@@ -2336,7 +2336,7 @@ yyreduce:
                 if((yyvsp[0].symval)->S_type != type::BOOL_TYPE)
                         yyerror("Condition must be a boolean");
                 
-                G_If("if_start");
+                G_If_Start();
         
         }
 #line 2343 "y.tab.cpp" /* yacc.c:1646  */
@@ -2345,7 +2345,7 @@ yyreduce:
   case 92:
 #line 731 "parser.y" /* yacc.c:1646  */
     {
-                G_If("else");
+                G_If_Else();
         }
 #line 2351 "y.tab.cpp" /* yacc.c:1646  */
     break;
@@ -2353,7 +2353,7 @@ yyreduce:
   case 93:
 #line 735 "parser.y" /* yacc.c:1646  */
     {
-                G_If("if_else_end");
+                G_If_Else_End();
         }
 #line 2359 "y.tab.cpp" /* yacc.c:1646  */
     break;
@@ -2361,7 +2361,7 @@ yyreduce:
   case 94:
 #line 739 "parser.y" /* yacc.c:1646  */
     {
-                G_If("if_end");
+                G_If_End();
         }
 #line 2367 "y.tab.cpp" /* yacc.c:1646  */
     break;
@@ -2370,7 +2370,7 @@ yyreduce:
 #line 745 "parser.y" /* yacc.c:1646  */
     {
                 symtab.push();
-                G_Loop("loop_start");
+                G_Loop_Start();
         }
 #line 2376 "y.tab.cpp" /* yacc.c:1646  */
     break;
@@ -2382,7 +2382,7 @@ yyreduce:
                 symtab.tables.back().dump();
                 cout<<"<-----------------------local variable end--------------->"<<endl;
                 symtab.pop();
-                G_Loop("loop_end");
+                G_Loop_End();
         }
 #line 2388 "y.tab.cpp" /* yacc.c:1646  */
     break;
@@ -2435,13 +2435,13 @@ yyreduce:
                 if((yyvsp[-4].symval)->S_type != type::INT_TYPE || (yyvsp[0].symval)->S_type != type::INT_TYPE)
                         yyerror("Index must be an integer");
                 
-                G_Loop("loop_start");
+                G_Loop_Start();
                 if(symtab.global_lookup(*((yyvsp[-7].sval)))->index == -1)
                         G_For(*((yyvsp[-7].sval)), (yyvsp[0].symval)->S_data.int_data);
                 else
                         G_For(symtab.global_lookup(*((yyvsp[-7].sval)))->index, (yyvsp[0].symval)->S_data.int_data);
                 G_Compare(condition::IFGT);
-                G_Loop("loop_con");
+                G_When();
                 
         }
 #line 2448 "y.tab.cpp" /* yacc.c:1646  */
@@ -2462,7 +2462,7 @@ yyreduce:
                 symtab.tables.back().dump();
                 cout<<"<-----------------------local variable end--------------->"<<endl;
                 symtab.pop();
-                G_Loop("loop_end");
+                G_Loop_End();
         }
 #line 2468 "y.tab.cpp" /* yacc.c:1646  */
     break;

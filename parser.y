@@ -361,7 +361,7 @@ simple:     IDENTIFIER ASSIGN expression
         }
         |   PUT 
         {
-                G_put_Start();
+                G_put_Dec();
         }
         expression
         {
@@ -382,7 +382,7 @@ simple:     IDENTIFIER ASSIGN expression
         }
         |   RESULT expression
         {
-                G_IReturn();
+                G_Result();
         }
         |   RETURN
         {
@@ -400,7 +400,7 @@ when:    WHEN expression
                 /* type check */
                 if($2->S_type != type::BOOL_TYPE)
                         yyerror("type mismatch");
-                G_Loop("loop_con");
+                G_When();
         }
         |
         ;
@@ -724,27 +724,27 @@ if_head : IF expression
                 if($2->S_type != type::BOOL_TYPE)
                         yyerror("Condition must be a boolean");
                 
-                G_If("if_start");
+                G_If_Start();
         
         }
 condition:  if_head THEN function_bodys ELSE
         {
-                G_If("else");
+                G_If_Else();
         }
         function_bodys END IF
         {
-                G_If("if_else_end");
+                G_If_Else_End();
         }
         |   if_head THEN function_bodys END IF
         {
-                G_If("if_end");
+                G_If_End();
         }
         ;
 
 loop:   LOOP
         {
                 symtab.push();
-                G_Loop("loop_start");
+                G_Loop_Start();
         } 
         function_bodys END LOOP
         {
@@ -752,7 +752,7 @@ loop:   LOOP
                 symtab.tables.back().dump();
                 cout<<"<-----------------------local variable end--------------->"<<endl;
                 symtab.pop();
-                G_Loop("loop_end");
+                G_Loop_End();
         }
         |   FOR decreasing
         {
@@ -789,13 +789,13 @@ loop:   LOOP
                 if($7->S_type != type::INT_TYPE || $11->S_type != type::INT_TYPE)
                         yyerror("Index must be an integer");
                 
-                G_Loop("loop_start");
+                G_Loop_Start();
                 if(symtab.global_lookup(*($4))->index == -1)
                         G_For(*($4), $11->S_data.int_data);
                 else
                         G_For(symtab.global_lookup(*($4))->index, $11->S_data.int_data);
                 G_Compare(condition::IFGT);
-                G_Loop("loop_con");
+                G_When();
                 
         }
         function_bodys
@@ -808,7 +808,7 @@ loop:   LOOP
                 symtab.tables.back().dump();
                 cout<<"<-----------------------local variable end--------------->"<<endl;
                 symtab.pop();
-                G_Loop("loop_end");
+                G_Loop_End();
         }
         
         ;
