@@ -8,7 +8,7 @@ symboltables symtab;
 int param_num = 0;
 string filename;
 string className;
-ofstream ex;
+ofstream output;
 %}
 
 /* tokens */
@@ -400,7 +400,7 @@ when:    WHEN expression
                 /* type check */
                 if($2->S_type != type::BOOL_TYPE)
                         yyerror("type mismatch");
-                G_While("while_con");
+                G_Loop("loop_con");
         }
         |
         ;
@@ -547,7 +547,7 @@ expression:    expression '+' expression
                 else
                         yyerror("operator error");
                 
-                G_Compare(IFLT);  
+                G_Compare(condition::IFLT);  
         }
         |   expression LE  expression
         {
@@ -563,7 +563,7 @@ expression:    expression '+' expression
                 else
                         yyerror("operator error");
                 
-                G_Compare(IFLE);  
+                G_Compare(condition::IFLE);  
         }
         |   expression '=' expression
         {
@@ -580,7 +580,7 @@ expression:    expression '+' expression
                 else
                         yyerror("operator error");
                 
-                G_Compare(IFEE);  
+                G_Compare(condition::IFEE);  
         }
         |   expression GE expression
         {
@@ -595,7 +595,7 @@ expression:    expression '+' expression
                 else
                         yyerror("operator error");
 
-                G_Compare(IFGE);  
+                G_Compare(condition::IFGE);  
         }
         |   expression '>' expression
         {
@@ -610,7 +610,7 @@ expression:    expression '+' expression
                 else
                         yyerror("operator error");
 
-                G_Compare(IFGT);  
+                G_Compare(condition::IFGT);  
         }
         |   expression NOT_EQU expression
         {
@@ -626,7 +626,7 @@ expression:    expression '+' expression
                         $$ = boolConst($1->S_data.bool_data != $3->S_data.bool_data);
                 else
                         yyerror("operator error");
-                G_Compare(IFNE);  
+                G_Compare(condition::IFNE);  
         }
         |   '(' expression ')'
         {
@@ -744,7 +744,7 @@ condition:  if_head THEN function_bodys ELSE
 loop:   LOOP
         {
                 symtab.push();
-                G_While("while_start");
+                G_Loop("loop_start");
         } 
         function_bodys END LOOP
         {
@@ -752,7 +752,7 @@ loop:   LOOP
                 symtab.tables.back().dump();
                 cout<<"<-----------------------local variable end--------------->"<<endl;
                 symtab.pop();
-                G_While("while_end");
+                G_Loop("loop_end");
         }
         |   FOR decreasing
         {
@@ -789,13 +789,13 @@ loop:   LOOP
                 if($7->S_type != type::INT_TYPE || $11->S_type != type::INT_TYPE)
                         yyerror("Index must be an integer");
                 
-                G_While("while_start");
+                G_Loop("loop_start");
                 if(symtab.global_lookup(*($4))->index == -1)
                         G_For(*($4), $11->S_data.int_data);
                 else
                         G_For(symtab.global_lookup(*($4))->index, $11->S_data.int_data);
-                G_Compare(IFGT);
-                G_While("while_con");
+                G_Compare(condition::IFGT);
+                G_Loop("loop_con");
                 
         }
         function_bodys
@@ -808,7 +808,7 @@ loop:   LOOP
                 symtab.tables.back().dump();
                 cout<<"<-----------------------local variable end--------------->"<<endl;
                 symtab.pop();
-                G_While("while_end");
+                G_Loop("loop_end");
         }
         
         ;
@@ -850,11 +850,11 @@ int main(int argc, char *argv[])
     string jasmfolder = "jasmFile";
     filename = filename.replace(2,4,jasmfolder,0,8);
         	
-    ex.open(filename);
+    output.open(filename);
 
-    ex << "/*------------------------------------------------*/" << endl;
-    ex << "/*              Java Assembly Code                */" << endl;
-    ex << "/*------------------------------------------------*/" << endl;
+    output << "/*------------------------------------------------*/" << endl;
+    output << "/*              Java Assembly Code                */" << endl;
+    output << "/*------------------------------------------------*/" << endl;
 
     /* perform parsing */
     if (yyparse() == 1)                 /* parsing */

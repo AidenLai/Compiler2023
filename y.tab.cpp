@@ -73,7 +73,7 @@ symboltables symtab;
 int param_num = 0;
 string filename;
 string className;
-ofstream ex;
+ofstream output;
 
 #line 79 "y.tab.cpp" /* yacc.c:339  */
 
@@ -1941,7 +1941,7 @@ yyreduce:
                 /* type check */
                 if((yyvsp[0].symval)->S_type != type::BOOL_TYPE)
                         yyerror("type mismatch");
-                G_While("while_con");
+                G_Loop("loop_con");
         }
 #line 1947 "y.tab.cpp" /* yacc.c:1646  */
     break;
@@ -2125,7 +2125,7 @@ yyreduce:
                 else
                         yyerror("operator error");
                 
-                G_Compare(IFLT);  
+                G_Compare(condition::IFLT);  
         }
 #line 2131 "y.tab.cpp" /* yacc.c:1646  */
     break;
@@ -2145,7 +2145,7 @@ yyreduce:
                 else
                         yyerror("operator error");
                 
-                G_Compare(IFLE);  
+                G_Compare(condition::IFLE);  
         }
 #line 2151 "y.tab.cpp" /* yacc.c:1646  */
     break;
@@ -2166,7 +2166,7 @@ yyreduce:
                 else
                         yyerror("operator error");
                 
-                G_Compare(IFEE);  
+                G_Compare(condition::IFEE);  
         }
 #line 2172 "y.tab.cpp" /* yacc.c:1646  */
     break;
@@ -2185,7 +2185,7 @@ yyreduce:
                 else
                         yyerror("operator error");
 
-                G_Compare(IFGE);  
+                G_Compare(condition::IFGE);  
         }
 #line 2191 "y.tab.cpp" /* yacc.c:1646  */
     break;
@@ -2204,7 +2204,7 @@ yyreduce:
                 else
                         yyerror("operator error");
 
-                G_Compare(IFGT);  
+                G_Compare(condition::IFGT);  
         }
 #line 2210 "y.tab.cpp" /* yacc.c:1646  */
     break;
@@ -2224,7 +2224,7 @@ yyreduce:
                         (yyval.symval) = boolConst((yyvsp[-2].symval)->S_data.bool_data != (yyvsp[0].symval)->S_data.bool_data);
                 else
                         yyerror("operator error");
-                G_Compare(IFNE);  
+                G_Compare(condition::IFNE);  
         }
 #line 2230 "y.tab.cpp" /* yacc.c:1646  */
     break;
@@ -2370,7 +2370,7 @@ yyreduce:
 #line 745 "parser.y" /* yacc.c:1646  */
     {
                 symtab.push();
-                G_While("while_start");
+                G_Loop("loop_start");
         }
 #line 2376 "y.tab.cpp" /* yacc.c:1646  */
     break;
@@ -2382,7 +2382,7 @@ yyreduce:
                 symtab.tables.back().dump();
                 cout<<"<-----------------------local variable end--------------->"<<endl;
                 symtab.pop();
-                G_While("while_end");
+                G_Loop("loop_end");
         }
 #line 2388 "y.tab.cpp" /* yacc.c:1646  */
     break;
@@ -2435,13 +2435,13 @@ yyreduce:
                 if((yyvsp[-4].symval)->S_type != type::INT_TYPE || (yyvsp[0].symval)->S_type != type::INT_TYPE)
                         yyerror("Index must be an integer");
                 
-                G_While("while_start");
+                G_Loop("loop_start");
                 if(symtab.global_lookup(*((yyvsp[-7].sval)))->index == -1)
                         G_For(*((yyvsp[-7].sval)), (yyvsp[0].symval)->S_data.int_data);
                 else
                         G_For(symtab.global_lookup(*((yyvsp[-7].sval)))->index, (yyvsp[0].symval)->S_data.int_data);
-                G_Compare(IFGT);
-                G_While("while_con");
+                G_Compare(condition::IFGT);
+                G_Loop("loop_con");
                 
         }
 #line 2448 "y.tab.cpp" /* yacc.c:1646  */
@@ -2462,7 +2462,7 @@ yyreduce:
                 symtab.tables.back().dump();
                 cout<<"<-----------------------local variable end--------------->"<<endl;
                 symtab.pop();
-                G_While("while_end");
+                G_Loop("loop_end");
         }
 #line 2468 "y.tab.cpp" /* yacc.c:1646  */
     break;
@@ -2732,11 +2732,11 @@ int main(int argc, char *argv[])
     string jasmfolder = "jasmFile";
     filename = filename.replace(2,4,jasmfolder,0,8);
         	
-    ex.open(filename);
+    output.open(filename);
 
-    ex << "/*------------------------------------------------*/" << endl;
-    ex << "/*              Java Assembly Code                */" << endl;
-    ex << "/*------------------------------------------------*/" << endl;
+    output << "/*------------------------------------------------*/" << endl;
+    output << "/*              Java Assembly Code                */" << endl;
+    output << "/*------------------------------------------------*/" << endl;
 
     /* perform parsing */
     if (yyparse() == 1)                 /* parsing */

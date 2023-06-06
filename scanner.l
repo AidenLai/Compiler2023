@@ -15,6 +15,8 @@ char buf[MAX_LINE_LENG];
 
 
 SymbolTable symboltable;
+extern ofstream output;
+bool commentFlag = false;
 %}
 
 /* definitions */
@@ -113,7 +115,7 @@ when                   {token(WHEN);}
 
     /* comments */
 "{%"                  {LIST; BEGIN(COMMENT);}
-<COMMENT>"%}"         {LIST; BEGIN(INITIAL);}
+<COMMENT>"%}"         {LIST; BEGIN(INITIAL); commentFlag = true;}
 
 <COMMENT>\n           {
                         LIST;
@@ -121,9 +123,12 @@ when                   {token(WHEN);}
                         buf[0] = '\0';
                       }
 <COMMENT>.            {LIST;}
-"%".*                 {LIST;}
+"%".*                 {LIST; commentFlag = true;}
 
 \n      {
+        if(strlen(buf) > 0 && !commentFlag)
+            output << "/*\t" << linenum << ": " << buf << "\t*/" << endl;
+        commentFlag = false;
         LIST;
         printf("%d: %s", linenum++, buf);
         buf[0] = '\0';
