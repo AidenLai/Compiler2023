@@ -52,7 +52,8 @@ public:
 
   int takeLabel(int n)
   {
-    return labelVector.back().Count + n;
+    int temp = labelVector.back().Count + n;
+    return temp;
   }
 
   int getLable()
