@@ -100,13 +100,13 @@ enum class op
 // Initialize the output file
 void G_init()
 {
-    output << "class " << className << "{\n";
+    output << "class " << className << "{" << endl;
 }
 
 // End the output file
 void G_end()
 {
-    output << "}\n";
+    output << "}" << endl;
 }
 
 // Gen main function
@@ -125,19 +125,19 @@ void G_main()
 // Function end
 void G_main_end()
 {
-    output << "\t}\n";
+    output << "\t}" << endl;
 }
 
 // Dec global variable
 void G_global_Var(string id)
 {
-    output << "\tfield static int " << id << "\n";
+    output << "\tfield static int " << id << endl;
 }
 
 // Dec global variable with value
 void G_global_Var(string id, int value)
 {
-    output << "\tfield static int " << id << " = " << value << "\n";
+    output << "\tfield static int " << id << " = " << value << endl;
 }
 
 // Dec local variable
