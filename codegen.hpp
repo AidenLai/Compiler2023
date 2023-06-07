@@ -82,6 +82,19 @@ enum class condition
   IFNE, //
 };
 
+enum class op
+{
+  A_D_D,
+  S_U_B,
+  M_U_L,
+  D_I_V,
+  M_O_D,
+  N_E_G,
+  A_N_D,
+  O_R,
+  N_O_T,
+};
+
 
 // Initialize the output file
 void G_init()
@@ -220,45 +233,45 @@ void G_get_local_Var(int index)
 }
 
 // operator
-void G_Operator(char op)
+void G_Operator(op op)
 {
   switch (op)
   {
-  case 'm':
+  case op::N_E_G:
     output << "\t\tineg"
        << "\n";
     break;
-  case '*':
+  case op::M_U_L:
     output << "\t\timul"
        << "\n";
     break;
-  case '/':
+  case op::D_I_V:
     output << "\t\tidiv"
        << "\n";
     break;
-  case '+':
+  case op::A_D_D:
     output << "\t\tiadd"
        << "\n";
     break;
-  case '-':
+  case op::S_U_B:
     output << "\t\tisub"
        << "\n";
     break;
-  case '!':
+  case op::N_O_T: 
     output << "\t\tldc 1"
        << "\n"
        << "\t\tixor"
        << "\n";
     break;
-  case '&':
+  case op::A_N_D:
     output << "\t\tiand"
        << "\n";
     break;
-  case '|':
+  case op::O_R:
     output << "\t\tior"
        << "\n";
     break;
-  case '%':
+  case op::M_O_D:
     output << "\t\tirem"
        << "\n";
     break;
@@ -421,6 +434,6 @@ void G_For_Body(string id)
 {
   G_get_global_Var(id);
   G_const_Int(1);
-  G_Operator('+');
+  G_Operator(op::A_D_D);
   G_set_global_Var(id);
 }

@@ -1960,7 +1960,7 @@ yyreduce:
                         (yyval.symval) = realConst((yyvsp[-2].symval)->S_data.real_data + (yyvsp[0].symval)->S_data.real_data);
                 else
                         yyerror("operator error");
-                G_Operator('+');
+                G_Operator(op::A_D_D);
         }
 #line 1966 "y.tab.cpp" /* yacc.c:1646  */
     break;
@@ -1980,7 +1980,7 @@ yyreduce:
                 else
                         yyerror("operator error");
                 cout <<"Reduce exp - exp"<<endl;
-                G_Operator('-');
+                G_Operator(op::S_U_B);
         }
 #line 1986 "y.tab.cpp" /* yacc.c:1646  */
     break;
@@ -2000,7 +2000,7 @@ yyreduce:
                 else
                         yyerror("operator error");
                 
-                G_Operator('*');
+                G_Operator(op::M_U_L);
         }
 #line 2006 "y.tab.cpp" /* yacc.c:1646  */
     break;
@@ -2020,7 +2020,7 @@ yyreduce:
                 else
                         yyerror("operator error");
                 
-                G_Operator('/');
+                G_Operator(op::D_I_V);
         }
 #line 2026 "y.tab.cpp" /* yacc.c:1646  */
     break;
@@ -2038,7 +2038,7 @@ yyreduce:
                 else
                         yyerror("operator error");
                 
-                G_Operator('%');
+                G_Operator(op::M_O_D);
         }
 #line 2044 "y.tab.cpp" /* yacc.c:1646  */
     break;
@@ -2054,7 +2054,7 @@ yyreduce:
                         yyerror("operator error");
 
                 cout <<"Reduce - exp"<<endl;
-                G_Operator('m');
+                G_Operator(op::N_E_G);
         }
 #line 2060 "y.tab.cpp" /* yacc.c:1646  */
     break;
@@ -2071,7 +2071,7 @@ yyreduce:
                         (yyval.symval) = boolConst((yyvsp[-2].symval)->S_data.bool_data && (yyvsp[0].symval)->S_data.bool_data);
                 else
                         yyerror("operator error");
-                G_Operator('&');
+                G_Operator(op::A_N_D);
                 
         }
 #line 2078 "y.tab.cpp" /* yacc.c:1646  */
@@ -2090,7 +2090,7 @@ yyreduce:
                 else
                         yyerror("operator error");
                 
-                G_Operator('|');
+                G_Operator(op::O_R);
         }
 #line 2096 "y.tab.cpp" /* yacc.c:1646  */
     break;
@@ -2104,7 +2104,7 @@ yyreduce:
                 else
                         yyerror("operator error");
                 
-                G_Operator('!');
+                G_Operator(op::N_O_T);
                 
         }
 #line 2111 "y.tab.cpp" /* yacc.c:1646  */

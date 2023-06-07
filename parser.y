@@ -418,7 +418,7 @@ expression:    expression '+' expression
                         $$ = realConst($1->S_data.real_data + $3->S_data.real_data);
                 else
                         yyerror("operator error");
-                G_Operator('+');
+                G_Operator(op::A_D_D);
         }
         |   expression '-' expression
         {
@@ -434,7 +434,7 @@ expression:    expression '+' expression
                 else
                         yyerror("operator error");
                 cout <<"Reduce exp - exp"<<endl;
-                G_Operator('-');
+                G_Operator(op::S_U_B);
         }
         |   expression '*' expression
         {
@@ -450,7 +450,7 @@ expression:    expression '+' expression
                 else
                         yyerror("operator error");
                 
-                G_Operator('*');
+                G_Operator(op::M_U_L);
         }
         |   expression '/' expression
         {
@@ -466,7 +466,7 @@ expression:    expression '+' expression
                 else
                         yyerror("operator error");
                 
-                G_Operator('/');
+                G_Operator(op::D_I_V);
         }
         |   expression MOD expression
         {
@@ -480,7 +480,7 @@ expression:    expression '+' expression
                 else
                         yyerror("operator error");
                 
-                G_Operator('%');
+                G_Operator(op::M_O_D);
         }
         |   '-' expression    %prec UMINUS
         {
@@ -492,7 +492,7 @@ expression:    expression '+' expression
                         yyerror("operator error");
 
                 cout <<"Reduce - exp"<<endl;
-                G_Operator('m');
+                G_Operator(op::N_E_G);
         }
         |   expression AND expression
         {
@@ -505,7 +505,7 @@ expression:    expression '+' expression
                         $$ = boolConst($1->S_data.bool_data && $3->S_data.bool_data);
                 else
                         yyerror("operator error");
-                G_Operator('&');
+                G_Operator(op::A_N_D);
                 
         }
         |   expression OR expression
@@ -520,7 +520,7 @@ expression:    expression '+' expression
                 else
                         yyerror("operator error");
                 
-                G_Operator('|');
+                G_Operator(op::O_R);
         }
         |   NOT expression
         {
@@ -530,7 +530,7 @@ expression:    expression '+' expression
                 else
                         yyerror("operator error");
                 
-                G_Operator('!');
+                G_Operator(op::N_O_T);
                 
         }
         |   expression '<' expression
