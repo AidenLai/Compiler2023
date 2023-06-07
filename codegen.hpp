@@ -304,14 +304,14 @@ void G_Compare(condition cond)
     output << "\t\tifne";
     break;
   }
-  int l1 = labelManager.getLable();
-  int l2 = labelManager.getLable();
-  output << " L" << l1 << endl;
-  output << "\t\ticonst_0" << endl;
-  output << "\t\tgoto L" << l2 << endl;
-  output << "L" << l1 << ":" << endl;
-  output << "\t\ticonst_1" << endl;
-  output << "L" << l2 << ":" << endl;
+  int label_1 = labelManager.getLable();
+  int label_2 = labelManager.getLable();
+  output << " L" << label_1 << "\n";
+  output << "\t\ticonst_0" << "\n";
+  output << "\t\tgoto L" << label_2 << "\n";
+  output << "L" << label_1 << ":" << "\n";
+  output << "\t\ticonst_1" << "\n";
+  output << "L" << label_2 << ":" << "\n";
 }
 
 // function declaration start
