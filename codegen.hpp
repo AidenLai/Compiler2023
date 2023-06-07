@@ -34,14 +34,15 @@ public:
 
   void pushNLable(int n)
   {
-    labelVector.push_back(label(counts));
-    counts += n;
+    label temp = label(counts);
+    labelVector.push_back(temp);
+    counts = counts + n;
   }
 
   void NLabel(int n)
   {
     labelVector.back().Count += n;
-    counts += n;
+    counts = counts + n;
   }
 
   void popLabel()
