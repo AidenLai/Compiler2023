@@ -326,14 +326,19 @@ parameter:  IDENTIFIER type
 
 block:      BEGIN_
         {
+                int temp = symtab.tables.back().index;
                 symtab.push();
+                symtab.tables.back().index = temp;
+
         }
         function_bodys END
         {
                 cout<<"<-----------------------local variable------------------->"<<endl;
                 symtab.tables.back().dump();
                 cout<<"<-----------------------local variable end--------------->"<<endl;
+                int temp = symtab.tables.back().index;
                 symtab.pop();
+                symtab.tables.back().index = temp;
         }
         ;
 simple:     IDENTIFIER ASSIGN expression
@@ -719,23 +724,45 @@ func_expression: expression
         }
         ;
 
-if_head : IF expression
+if_head : IF expression THEN 
         {
+                int temp = symtab.tables.back().index;
+                symtab.push();
+                symtab.tables.back().index = temp;
+        }
+        function_bodys
+        {
+                cout<<"<-----------------------local variable------------------->"<<endl;
+                symtab.tables.back().dump();
+                cout<<"<-----------------------local variable end--------------->"<<endl;
+                int temp = symtab.tables.back().index;
+                symtab.pop();
+                symtab.tables.back().index = temp;
+
                 if($2->S_type != type::BOOL_TYPE)
                         yyerror("Condition must be a boolean");
                 
                 G_If_Start();
         
         }
-condition:  if_head THEN function_bodys ELSE
+condition:  if_head ELSE
         {
                 G_If_Else();
+                int temp = symtab.tables.back().index;
+                symtab.push();
+                symtab.tables.back().index = temp;
         }
         function_bodys END IF
         {
+                cout<<"<-----------------------local variable------------------->"<<endl;
+                symtab.tables.back().dump();
+                cout<<"<-----------------------local variable end--------------->"<<endl;
+                int temp = symtab.tables.back().index;
+                symtab.pop();
+                symtab.tables.back().index = temp;
                 G_If_Else_End();
         }
-        |   if_head THEN function_bodys END IF
+        |   if_head END IF
         {
                 G_If_End();
         }
@@ -743,7 +770,9 @@ condition:  if_head THEN function_bodys ELSE
 
 loop:   LOOP
         {
+                int temp = symtab.tables.back().index;
                 symtab.push();
+                symtab.tables.back().index = temp;
                 G_Loop_Start();
         } 
         function_bodys END LOOP
@@ -751,12 +780,16 @@ loop:   LOOP
                 cout<<"<-----------------------local variable------------------->"<<endl;
                 symtab.tables.back().dump();
                 cout<<"<-----------------------local variable end--------------->"<<endl;
+                int temp = symtab.tables.back().index;
                 symtab.pop();
+                symtab.tables.back().index = temp;
                 G_Loop_End();
         }
         |   FOR decreasing
         {
+                int temp = symtab.tables.back().index;
                 symtab.push();
+                symtab.tables.back().index = temp;
         }        
         IDENTIFIER
         {
@@ -807,7 +840,9 @@ loop:   LOOP
                 cout<<"<-----------------------local variable------------------->"<<endl;
                 symtab.tables.back().dump();
                 cout<<"<-----------------------local variable end--------------->"<<endl;
+                int temp = symtab.tables.back().index;
                 symtab.pop();
+                symtab.tables.back().index = temp;
                 G_Loop_End();
         }
         
